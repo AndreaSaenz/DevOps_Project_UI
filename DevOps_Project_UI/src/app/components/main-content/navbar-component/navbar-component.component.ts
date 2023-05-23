@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserServicesService } from '../../../services/user/user-services.service'
 
 @Component({
   selector: 'app-navbar-component',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponentComponent {
 
+  constructor (public userService: UserServicesService) {}
+
+  logOut(){};
 }

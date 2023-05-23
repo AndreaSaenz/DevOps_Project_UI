@@ -3,6 +3,7 @@ import { FormControl, FormGroupDirective, isFormControl, NgForm } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { StudentInterface } from 'src/app/interfaces/student-interface';
+import { StudentServicesService } from 'src/app/services/student/student-services.service';
 
 @Component({
   selector: 'app-students-table-component',
@@ -12,6 +13,8 @@ import { StudentInterface } from 'src/app/interfaces/student-interface';
 export class StudentsTableComponentComponent implements OnInit{
 
   students1 : any[] = []; 
+
+  students2 : Array<StudentInterface> = []
 
   backup: any = {};
   id: string | null;
@@ -84,7 +87,7 @@ export class StudentsTableComponentComponent implements OnInit{
       "editMode": false
   }]
 
-  constructor( private router: Router, private activatedRoute: ActivatedRoute) { 
+  constructor( private router: Router, private activatedRoute: ActivatedRoute, private studentService: StudentServicesService ) { 
     this.id = this.activatedRoute.snapshot.paramMap.get('studentId');
     console.log(this.id);
   }
@@ -142,10 +145,41 @@ export class StudentsTableComponentComponent implements OnInit{
 
   searchByIdMode(){
     if(this.id !== null){
-      this.title = 'Alumno (' + this.id + ')';
-      this.students = this.oneStudent;
+      if( !Number.isNaN(Number(this.id))){
+        this.title = 'Alumno (' + this.id + ')';
+        this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+          var student: StudentInterface = {
+            id: data.payload.doc.id, //id: data.payload.data()['id'],
+            Name: data.payload.doc.Name, //: data.payload.data()['Name'],
+            email: data.payload.doc.email, //email: data.payload.data()['email'],
+            telefono: data.payload.doc.telefono, //telefono: data.payload.data()['telefono'],
+            licenciatura: data.payload.doc.licenciatura, //licenciatura: data.payload.data()['licenciatura'],
+            semestre: data.payload.doc.semestre, //semestre: data.payload.data()['semestre'],
+            editMode: false
+          }
+          this.students2.push(student)
+        })
+        this.students2 = this.oneStudent;
+      }
+      this.router.navigate(['/main/students']);
 
     }
+
+    this.studentService.getAllStudents().subscribe(data => {
+      data.forEach((element: any) => {
+        var student: StudentInterface = {
+          id: element.payload.doc.id, //id: element.payload.data()['id'],
+          Name: element.payload.doc.Name, //: element.payload.data()['Name'],
+          email: element.payload.doc.email, //email: element.payload.data()['email'],
+          telefono: element.payload.doc.telefono, //telefono: element.payload.data()['telefono'],
+          licenciatura: element.payload.doc.licenciatura, //licenciatura: element.payload.data()['licenciatura'],
+          semestre: element.payload.doc.semestre, //semestre: element.payload.data()['semestre'],
+          editMode: false
+        }
+        this.students2.push(student)
+      });
+      console.log(this.students2);
+    });
   }
 
 }

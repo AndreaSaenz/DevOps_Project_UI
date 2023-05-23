@@ -122,14 +122,14 @@ export class StudentsTableComponentComponent implements OnInit{
   }
 
   updateStudent(form: NgForm){
-    //Invocar método PUT del servicio
+    /*//Invocar método PUT del servicio
     console.log(Object.values(form.value));
     console.log(form.value);
     console.log(Object.entries(form.value));
     this.students.forEach(element => {
       element.editMode = false;
     });
-    this.router.navigate(['/main/students']);
+    this.router.navigate(['/main/students']);*/
   }
 
   cancelEditMode(student: any){
@@ -143,16 +143,18 @@ export class StudentsTableComponentComponent implements OnInit{
     //this.router.navigate(['/main/students']);
   }
 
+  
+
   searchByIdMode(){
-    if(this.id !== null){
+    /*if(this.id !== null){
       this.title = 'Alumno (' + this.id + ')';
       this.students = this.oneStudent;
 
-    }
+    }*/
     if(this.id !== null){
       if( !Number.isNaN(Number(this.id))){
         this.title = 'Alumno (' + this.id + ')';
-        /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+      /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
           var student: StudentInterface = {
             id: data.payload.doc.id, //id: data.payload.data()['id'],
             Name: data.payload.doc.Name, //: data.payload.data()['Name'],
@@ -162,15 +164,58 @@ export class StudentsTableComponentComponent implements OnInit{
             semestre: data.payload.doc.semestre, //semestre: data.payload.data()['semestre'],
             editMode: false
           }
-          this.students2.push(student)
+          this.students2.push(student)          
         })*/
+
+      /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+          next: (val: any) => {
+            var student: StudentInterface = {
+              id: data.payload.doc.id, //id: data.payload.data()['id'],
+              Name: data.payload.doc.Name, //: data.payload.data()['Name'],
+              email: data.payload.doc.email, //email: data.payload.data()['email'],
+              telefono: data.payload.doc.telefono, //telefono: data.payload.data()['telefono'],
+              licenciatura: data.payload.doc.licenciatura, //licenciatura: data.payload.data()['licenciatura'],
+              semestre: data.payload.doc.semestre, //semestre: data.payload.data()['semestre'],
+              editMode: false
+            }
+            this.students2.push(student)   
+
+            this.router.navigate(['/main/students']);
+          },
+          error: (error: any) => {
+            console.error(error);
+            window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+          },
+        });*/
         this.students2 = this.oneStudent;
       } else{
         this.router.navigate(['/main/students']);
       }
-      
 
     }
+
+  /*this.studentService.getAllStudents().subscribe(data => {
+      next: (val: any) => {
+        data.forEach((element: any) => {
+          var student: StudentInterface = {
+            id: element.payload.doc.id, //id: element.payload.data()['id'],
+            Name: element.payload.doc.Name, //: element.payload.data()['Name'],
+            email: element.payload.doc.email, //email: element.payload.data()['email'],
+            telefono: element.payload.doc.telefono, //telefono: element.payload.data()['telefono'],
+            licenciatura: element.payload.doc.licenciatura, //licenciatura: element.payload.data()['licenciatura'],
+            semestre: element.payload.doc.semestre, //semestre: element.payload.data()['semestre'],
+            editMode: false
+          }
+          this.students2.push(student)
+        });
+        console.log(this.students2);
+      },
+      error: (error: any) => {
+        console.error(error);
+        window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+      },
+    });*/
+
 
     /*this.studentService.getAllStudents().subscribe(data => {
       data.forEach((element: any) => {
@@ -187,6 +232,7 @@ export class StudentsTableComponentComponent implements OnInit{
       });
       console.log(this.students2);
     });*/
+
   }
 
 }

@@ -129,6 +129,7 @@ export class StudentsTableComponentComponent implements OnInit{
     console.log(Object.values(form.value));
     console.log(form.value);
     console.log(Object.entries(form.value));
+
     this.students.forEach(element => {
       element.editMode = false;
     });
@@ -143,7 +144,23 @@ export class StudentsTableComponentComponent implements OnInit{
 
   deleteStudent(student: any){
     //Invocar método DELETE del servicio 
-    //this.router.navigate(['/main/students']);
+    //
+    /*
+    this.studentService.deleteStudent(student.id).subscribe(data => {
+      window.alert(`Alumno eliminado}`);
+      this.getAllStudents();
+    });
+    
+    */
+    /*
+    this.studentService.deleteStudent(student.id).subscribe({
+      next: (res) => {
+        this.getAllStudents();
+      },
+      error: window.alert,
+    });
+    /**/
+    this.router.navigate(['/main/students']);
   }
 
   getAllStudents(){

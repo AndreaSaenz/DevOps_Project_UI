@@ -145,9 +145,14 @@ export class StudentsTableComponentComponent implements OnInit{
 
   searchByIdMode(){
     if(this.id !== null){
+      this.title = 'Alumno (' + this.id + ')';
+      this.students = this.oneStudent;
+
+    }
+    if(this.id !== null){
       if( !Number.isNaN(Number(this.id))){
         this.title = 'Alumno (' + this.id + ')';
-        this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+        /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
           var student: StudentInterface = {
             id: data.payload.doc.id, //id: data.payload.data()['id'],
             Name: data.payload.doc.Name, //: data.payload.data()['Name'],
@@ -158,14 +163,16 @@ export class StudentsTableComponentComponent implements OnInit{
             editMode: false
           }
           this.students2.push(student)
-        })
+        })*/
         this.students2 = this.oneStudent;
+      } else{
+        this.router.navigate(['/main/students']);
       }
-      this.router.navigate(['/main/students']);
+      
 
     }
 
-    this.studentService.getAllStudents().subscribe(data => {
+    /*this.studentService.getAllStudents().subscribe(data => {
       data.forEach((element: any) => {
         var student: StudentInterface = {
           id: element.payload.doc.id, //id: element.payload.data()['id'],
@@ -179,7 +186,7 @@ export class StudentsTableComponentComponent implements OnInit{
         this.students2.push(student)
       });
       console.log(this.students2);
-    });
+    });*/
   }
 
 }

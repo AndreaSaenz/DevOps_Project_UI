@@ -105,6 +105,13 @@ export class StudentsTableComponentComponent implements OnInit{
     this.searchByIdMode();
   }
 
+  reloadCurrentRoute() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+  }
+
   editModeOn(student: any){
     this.students.forEach(element => {
       element.editMode = false;
@@ -129,11 +136,29 @@ export class StudentsTableComponentComponent implements OnInit{
     console.log(Object.values(form.value));
     console.log(form.value);
     console.log(Object.entries(form.value));
-
+    console.log(form.value.studentId);
+    
+    /*
+    this.studentService.updateStudent(form.value.studentId, form.value).subscribe({
+      next: (val: any) => {
+        window.alert(`Alumno actualizado}`);
+      },
+      error: (err: any) => {
+        console.error(err);
+      },
+    });
+  
+    */
+    
     this.students.forEach(element => {
       element.editMode = false;
     });
-    this.router.navigate(['/main/students']);
+    if(this.title == 'Alumnos' ){
+      this.reloadCurrentRoute();
+    }
+    else{
+      this.router.navigate(['/main/students']);
+    }
   }
 
   cancelEditMode(student: any){
@@ -160,7 +185,14 @@ export class StudentsTableComponentComponent implements OnInit{
       error: window.alert,
     });
     /**/
-    this.router.navigate(['/main/students']);
+    console.log("Eliminando alumno");
+    if(this.title == 'Alumnos' ){
+      this.reloadCurrentRoute();
+    }
+    else{
+      this.router.navigate(['/main/students']);
+    }
+    //this.router.navigate(['/main/students']);
   }
 
   getAllStudents(){

@@ -23,7 +23,7 @@ export class StudentServicesService {
     return this.http.post(this.URL, JSON.stringify(data));
   }
 
-  updateEmployee(id: number, data: any): Observable<any> {
+  updateStudent(id: number, data: any): Observable<any> {
     return this.http.put<any>( this.URL + `/${id}`, JSON.stringify(data));
   }
 

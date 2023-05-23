@@ -118,20 +118,21 @@ export class StudentsTableComponentComponent implements OnInit{
     console.log(search);
     console.log(form.value);
     console.log(Object.values(form.value)[0]);
-   // this.router.navigate(['/main/students/']);
+    this.title = 'Alumno (' + Object.values(form.value)[0] + ')';
     this.router.navigate(['/main/students/', Object.values(form.value)[0]]);
     console.log(this.title);
+    
   }
 
   updateStudent(form: NgForm){
-    /*//Invocar método PUT del servicio
+    //Invocar método PUT del servicio
     console.log(Object.values(form.value));
     console.log(form.value);
     console.log(Object.entries(form.value));
     this.students.forEach(element => {
       element.editMode = false;
     });
-    this.router.navigate(['/main/students']);*/
+    this.router.navigate(['/main/students']);
   }
 
   cancelEditMode(student: any){
@@ -230,11 +231,13 @@ export class StudentsTableComponentComponent implements OnInit{
       this.students = this.oneStudent;
 
     }*/
+    console.log(this.title);
     if(this.id !== null){
+      this.title = 'Alumno (' + this.id + ')';
       if( !Number.isNaN(Number(this.id))){
-        this.title = 'Alumno (' + this.id + ')';
+        //this.title = 'Alumno (' + this.id + ')';
       
-        //this.getStudentById();
+        this.getStudentById();
 
         this.students = this.oneStudent;
       } else{
@@ -243,7 +246,7 @@ export class StudentsTableComponentComponent implements OnInit{
 
     }
 
-    //this.getAllStudents();
+    this.getAllStudents();
 
   }
 

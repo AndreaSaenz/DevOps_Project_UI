@@ -15,12 +15,16 @@ const routes: Routes = [
     {path: '', redirectTo: 'students', pathMatch: 'full' },
     {path: 'students', component: StudentsTableComponentComponent},
     {path: 'students/new', component: CreateStudentComponentComponent},
+    {path: 'students/:studentId', component: StudentsTableComponentComponent},
     {path: 'computers', component: ComputersTableComponentComponent},
     {path: 'computers/new', component: CreateComputerComponentComponent},
+    {path: 'computers/:computerId', component: ComputersTableComponentComponent},
     {path: 'fines', component: FinesTableComponentComponent },
     {path: 'fines/new', component: CreateFineComponentComponent },
+    {path: 'fines/:fineId', component: FinesTableComponentComponent },
     {path: 'loans', component: LoansTableComponentComponent },
-    {path: 'loans/new', component: CreateLoanComponentComponent }
+    {path: 'loans/new', component: CreateLoanComponentComponent },
+    {path: 'loans/:loanId', component: LoansTableComponentComponent }
   ]}
 ];
 

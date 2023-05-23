@@ -1,1 +1,53 @@
-<p>create-student-component works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card" >
+                <div class="card-body">
+                    <div class="text-center">
+                        <span class="h3"> Agregar alumno </span>
+                    </div>
+                    <form class="mt-4" [formGroup]="newStudent" (ngSubmit)="createStudent()" >
+                        <div>
+                            <label id="name">Nombre</label>
+                            <input type="text" class="form-control form-control-lg-mt-3" formControlName="Name" placeholder="Nombre">
+                            <div *ngIf="newStudent.controls['Name'].invalid && newStudent.controls['Name'].touched" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Campo vacío no permitido.               
+                            </div>
+                        </div>
+                        <div>
+                            <label>Email</label>
+                            <input type="email" class="form-control form-control-lg-mt-3" formControlName="email" placeholder="Ejemplo: xyz@abc.com" >
+                            <div *ngIf="newStudent.controls['email'].invalid && newStudent.controls['email'].touched" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Entrada no permitida. Campo obligatorio con formato: a@b.com               
+                            </div>
+                        </div>
+                        <div>
+                            <label>Teléfono</label>
+                            <input type="tel" class="form-control form-control-lg-mt-3" formControlName="telefono" placeholder="Ejemplo: 123-456-7890" >
+                            <div *ngIf="newStudent.controls['telefono'].invalid && newStudent.controls['telefono'].touched" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Entrada no permitida. Formato esperado: XXX-XXX-XXXX             
+                            </div>
+                        </div>                    
+                        <div class="row">
+                            <div class="col">
+                                <label>Licenciatura</label>
+                                <input type="text" class="form-control form-control-lg-mt-3" formControlName="licenciatura" placeholder="Licenciatura">
+                            </div>
+                            <div class="col">
+                                <label>Semestre</label>
+                                <input type="number" class="form-control form-control-lg-mt-3" formControlName="semestre" placeholder="Ejemplo: 1">
+                                <div *ngIf="newStudent.controls['semestre'].invalid && newStudent.controls['semestre'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Se espera un número del 0 al 30            
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" [disabled]="!newStudent.valid" class="btn btn-success btn-lg me-md-2">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

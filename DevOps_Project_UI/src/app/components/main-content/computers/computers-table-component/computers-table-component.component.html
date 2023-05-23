@@ -1,1 +1,158 @@
-<p>computers-table-component works!</p>
+<div class="container mt-4">
+    <div class="card" >
+      <div class="card-body bg-body-tertiary">
+        <span class="h3"> {{ title }} </span>
+        <div class="d-flex gap-2 d-md-flex justify-content-md-end"  style="white-space: nowrap; margin-top: 5px;">
+          <form (ngSubmit) ="searchComputerById(false, searchForm)" #searchForm="ngForm" class="d-inline-flex" role="search" >
+            <input class="form-control me-2 p-2" type="number" id="search" name="search" aria-label="Buscar alumno por Id" ngModel #search="ngModel" aria-describedby="searchForm" placeholder="Buscar alumno por Id numérico" required >
+            <button class="btn btn-outline-success btn-lg" type="submit" [disabled]="!searchForm.valid" title="Buscar por id" id="btnSearch">Buscar</button>
+            <button type="button" class="btn btn-primary btn-lg me-md-2" style="margin-right: auto; margin-left: 30px;" routerLink="/main/computers/new">Agregar alumno</button>
+          </form>  
+        </div>
+        <h5 style="margin-top: 30px; margin-bottom: 20px;" *ngIf="computers.length == 0">No hay datos para mostrar</h5>
+        <form (ngSubmit) ="updateComputer(formulario)" #formulario="ngForm">
+          <div class="table-responsive-lg">
+            <table class="table table-striped mt-5 table-hover" *ngIf="computers.length > 0" >
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Teléfono</th>
+                  <th scope="col">Licenciatura</th>
+                  <th scope="col">Semestre</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let computer of computers" > <!--class="needs-validation" name="formulario1" novalidate>-->
+                
+                  <td> 
+                    <div >
+                      <div *ngIf="computer.editMode">
+                        <input class="form-control " type="number" id="computerId" name="computerId" aria-label="computerId" [(ngModel)]="computer.id" #computerId="ngModel" readonly>
+                      </div>
+                      <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                        {{ computer.id }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerName" name="computerName" aria-label="computerName" [(ngModel)]="computer.Name" #computerName="ngModel" required/>
+                      <div *ngIf="computerName.invalid && (computerName.dirty || computerName.touched)">
+                        <div *ngIf="computerName.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.Name }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="email" id="computerEmail" name="computerEmail" aria-label="computerEmail" pattern=".+@.+\.com" [(ngModel)]="computer.email" #computerEmail="ngModel" required/>
+                      <div *ngIf="computerEmail.invalid && (computerEmail.dirty || computerEmail.touched)">
+                        <div *ngIf="computerEmail.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                        <div *ngIf="!computerEmail.errors?.['isEmail']" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                          Correo inválido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.email }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control"  type="tel" id="computerPhone" name="computerPhone" aria-label="computerPhone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" [(ngModel)]="computer.telefono" #computerPhone="ngModel"> <!-- required/> --> 
+                      <small>Formato: 123-456-7890</small>
+                      <div *ngIf="computerPhone.invalid && (computerPhone.dirty || computerPhone.touched)">
+                        <!--<div *ngIf="computerPhone.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>-->
+                        <div *ngIf="!computerPhone.errors?.['isTel']" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                          Teléfono inválido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.telefono }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerLic" name="computerLic" aria-label="computerLic" [(ngModel)]="computer.licenciatura" #computerLic="ngModel"> <!-- required/>  
+                      <div *ngIf="computerLic.invalid && (computerLic.dirty || computerLic.touched)">
+                        <div *ngIf="computerLic.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                      </div>-->
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.licenciatura }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="number" id="computerSemester" name="computerSemester" aria-label="computerSemester" [(ngModel)]="computer.semestre" #computerSemester="ngModel" min="0" max="30"> <!-- required/> --> 
+                      <small>Entrada numérica mayor a 0 y menor a 30.</small>
+                      <!--<div *ngIf="computerSemester.invalid && (computerSemester.dirty || computerSemester.touched)">
+                        <div *ngIf="computerSemester.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Entrada vacía o de texto no permitida.               
+                        </div>
+                        <div *ngIf="!computerSemester.errors?.['isNumber']" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                          Semestre inválido.               
+                        </div>
+                      </div>-->
+                      <div *ngIf="computerSemester.invalid && (computerSemester.dirty || computerSemester.touched)" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                        Semestre inválido.               
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.semestre }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="submit" class="btn btn-success" [disabled]="!formulario.valid" title="Editar alumno" id="updateComputer"> 
+                            <i class="bi bi-check-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="cancelEditMode(computer)" id="cancelEditMode" >
+                            <i class="bi bi-x-square"></i>
+                          </button>
+                        </a>
+                      </div>
+                      
+                    </div>
+                    <div *ngIf="!computer.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a><!--href="/main/computers/{{computer.id}}"-->
+                          <button type="button" class="btn btn-success" (click)="editModeOn(computer)" id="editModeOn"> 
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="deleteComputer(computer)" id="deleteComputer" >
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

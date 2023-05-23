@@ -232,7 +232,7 @@ export class StudentsTableComponentComponent implements OnInit{
       if( !Number.isNaN(Number(this.id))){
         this.title = 'Alumno (' + this.id + ')';
       
-        this.getStudentById();
+        //this.getStudentById();
 
         this.students = this.oneStudent;
       } else{
@@ -240,7 +240,8 @@ export class StudentsTableComponentComponent implements OnInit{
       }
 
     }
-    
+
+    //this.getAllStudents();
 
   }
 

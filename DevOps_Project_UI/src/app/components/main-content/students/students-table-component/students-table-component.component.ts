@@ -1,4 +1,4 @@
-import { Component, NgModuleFactory, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, isFormControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -118,7 +118,9 @@ export class StudentsTableComponentComponent implements OnInit{
     console.log(search);
     console.log(form.value);
     console.log(Object.values(form.value)[0]);
+   // this.router.navigate(['/main/students/']);
     this.router.navigate(['/main/students/', Object.values(form.value)[0]]);
+    console.log(this.title);
   }
 
   updateStudent(form: NgForm){

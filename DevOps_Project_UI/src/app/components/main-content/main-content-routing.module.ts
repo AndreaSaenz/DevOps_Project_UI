@@ -15,6 +15,7 @@ const routes: Routes = [
     {path: '', redirectTo: 'students', pathMatch: 'full' },
     {path: 'students', component: StudentsTableComponentComponent},
     {path: 'students/new', component: CreateStudentComponentComponent},
+    {path: 'students/:studentId', component: StudentsTableComponentComponent},
     {path: 'computers', component: ComputersTableComponentComponent},
     {path: 'computers/new', component: CreateComputerComponentComponent},
     {path: 'fines', component: FinesTableComponentComponent },

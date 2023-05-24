@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MainContentRoutingModule } from './main-content-routing.module';
 import { BoardComponentComponent } from './board-component/board-component.component';
@@ -29,7 +30,9 @@ import { CreateLoanComponentComponent } from './loans/create-loan-component/crea
   ],
   imports: [
     CommonModule,
-    MainContentRoutingModule
+    MainContentRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class MainContentModule { }

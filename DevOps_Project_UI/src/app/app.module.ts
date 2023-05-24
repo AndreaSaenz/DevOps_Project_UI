@@ -22,7 +22,6 @@ import { TokenInterceptorServiceService } from './services/tokenInterceptor/toke
     LoginComponentComponent,
     RegisterComponentComponent,
   ],
-
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [
     StudentServicesService,

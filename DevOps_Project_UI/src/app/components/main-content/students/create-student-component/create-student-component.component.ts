@@ -33,9 +33,10 @@ export class CreateStudentComponentComponent {
       "licenciatura": this.newStudent.value.licenciatura,
       "semestre": this.newStudent.value.semestre
     }
-    console.log(student);
-    console.log(student.Name);
-    console.log(this.newStudent);
+    //console.log(student);
+    //console.log(student.Name);
+    //console.log(this.newStudent);
+    //console.log(localStorage.getItem('token'));
 
     this.studentService.createStudent(student).subscribe({
       next: (val: any) => {

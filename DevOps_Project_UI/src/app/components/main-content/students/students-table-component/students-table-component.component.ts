@@ -103,17 +103,28 @@ export class StudentsTableComponentComponent implements OnInit{
       "editMode": true
     };
     this.searchByIdMode();
+    this.students2 = [];
+
+    this.studentService.refreshNeeded.subscribe( () => {
+      if(this.id !== null){
+        this.getStudentById();
+      }
+      else {
+        this.getAllStudents();
+      }
+    });
+
   }
 
   reloadCurrentRoute() {
     const currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
+      this.router.navigate([currentUrl]);
     });
   }
 
   editModeOn(student: any){
-    this.students.forEach(element => {
+    this.students2.forEach(element => {
       element.editMode = false;
     });
     student.editMode = true;
@@ -121,43 +132,55 @@ export class StudentsTableComponentComponent implements OnInit{
   }
 
   searchStudentById( search: boolean, form: NgForm){
-    console.log(form.valid);
-    console.log(search);
-    console.log(form.value);
-    console.log(Object.values(form.value)[0]);
-    this.title = 'Alumno (' + Object.values(form.value)[0] + ')';
+    //console.log(form.valid);
+    //console.log(search);
+    //console.log(form.value);
+    //console.log(Object.values(form.value)[0]);
+
+    //this.title = 'Alumno (' + Object.values(form.value)[0] + ')';
+    this.id = String(Object.values(form.value)[0]);
+    //console.log(this.id);
     this.router.navigate(['/main/students/', Object.values(form.value)[0]]);
-    console.log(this.title);
-    
+    //console.log(this.title);
+    this.searchByIdMode();
+
   }
 
   updateStudent(form: NgForm){
     //Invocar método PUT del servicio
-    console.log(Object.values(form.value));
-    console.log(form.value);
-    console.log(Object.entries(form.value));
-    console.log(form.value.studentId);
+    //console.log(Object.values(form.value));
+    //console.log(form.value);
+    //console.log(Object.entries(form.value));
+    //console.log(form.value.studentId);
     
-    /*
-    this.studentService.updateStudent(form.value.studentId, form.value).subscribe({
+    const studentToEdit: any ={
+      "Name": form.value.studentName,
+      "email": form.value.studentEmail,
+      "telefono": form.value.studentPhone,
+      "licenciatura": form.value.studentLic,
+      "semestre": form.value.studentSemester
+    }
+    
+    this.studentService.updateStudent(form.value.studentId, studentToEdit).subscribe({
       next: (val: any) => {
-        window.alert(`Alumno actualizado}`);
+        window.alert(`Alumno actualizado`);
       },
       error: (err: any) => {
         console.error(err);
       },
     });
   
-    */
-    
-    this.students.forEach(element => {
+    this.students2.forEach(element => {
       element.editMode = false;
     });
+
     if(this.title == 'Alumnos' ){
-      this.reloadCurrentRoute();
+      this.router.navigate(['/main/students']);
     }
     else{
-      this.router.navigate(['/main/students']);
+      //console.log(form.value.studentName);
+      this.router.navigate(['/main/students', form.value.studentId]);
+      //this.reloadCurrentRoute();
     }
   }
 
@@ -170,13 +193,12 @@ export class StudentsTableComponentComponent implements OnInit{
   deleteStudent(student: any){
     //Invocar método DELETE del servicio 
     //
-    /*
+    
     this.studentService.deleteStudent(student.id).subscribe(data => {
-      window.alert(`Alumno eliminado}`);
-      this.getAllStudents();
+      window.alert(`Alumno eliminado`);
+     //this.getAllStudents();
     });
     
-    */
     /*
     this.studentService.deleteStudent(student.id).subscribe({
       next: (res) => {
@@ -185,14 +207,22 @@ export class StudentsTableComponentComponent implements OnInit{
       error: window.alert,
     });
     /**/
-    console.log("Eliminando alumno");
-    if(this.title == 'Alumnos' ){
-      this.reloadCurrentRoute();
-    }
-    else{
+
+    //console.log("Eliminando alumno");
+    if(this.title !== 'Alumnos' ){
       this.router.navigate(['/main/students']);
     }
+    else{
+      console.log("Eliminando alumno");
+      //this.reloadCurrentRoute();
+    }
+
+    console.log('RECARGANDO');
+    //this.getAllStudents();
+    this.router.navigate(['/main/students']);
+    //this.searchByIdMode();
     //this.router.navigate(['/main/students']);
+
   }
 
   getAllStudents(){
@@ -211,6 +241,41 @@ export class StudentsTableComponentComponent implements OnInit{
       });
       console.log(this.students2);
     });*/
+
+    try {
+      this.studentService.getAllStudents().subscribe(data => {
+        this.students2 = [];
+        console.log(data);
+        const people = {...data[0], "editMode":false}
+        console.log(people);
+        /*data.forEach((index: number) => {
+          this.students2.push({
+            ...data[index],
+            "editMode": false
+          })
+        });
+        console.log("Primer for Each");
+        console.log(this.students2);*/
+        for (var element of data) {
+          this.students2.push({
+            ...element,
+            "editMode": false
+          })
+        }
+        console.log("Segundo for Each")
+        console.log(this.students2);
+        /*for (var element of data) {
+          console.log(element);
+          const item = {...element, "editMode":false}
+          console.log(people);
+          this.students2.push(item)
+        }*/
+      });
+    } catch (error: any) {
+      console.log(error);
+      window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+      this.students2 = [];
+    }
 
 //Otra posible manera
 /*  this.studentService.getAllStudents().subscribe(data => {
@@ -251,6 +316,27 @@ export class StudentsTableComponentComponent implements OnInit{
       this.students2.push(student)          
     })*/
 
+    try {
+      // this.students2=[];
+      console.log('ID: ' + this.id);
+      this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+        this.students2 = [];
+        console.log(data);
+        /* const item = {...data, "editMode":false}
+        console.log(item);
+        this.students2.push(item) */ 
+        this.students2.push({
+          ...data,
+          "editMode": false
+        })
+        console.log( 'GET BY ID'  );
+        console.log( this.students2 );       
+      });
+    } catch (error: any) {
+      console.log(error);
+      window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+    }
+
     //Otra posible manera
   /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
       next: (val: any) => {
@@ -280,22 +366,26 @@ export class StudentsTableComponentComponent implements OnInit{
       this.students = this.oneStudent;
 
     }*/
-    console.log(this.title);
+    console.log('LOADING COMPONENT');
+    //console.log(this.title);
     if(this.id !== null){
       this.title = 'Alumno (' + this.id + ')';
+      //console.log(this.title);
+      //console.log(this.id);
       if( !Number.isNaN(Number(this.id))){
         //this.title = 'Alumno (' + this.id + ')';
-      
+        //console.log("Dentro de busqueda por ID");
+        this.students2 = [];
         this.getStudentById();
 
-        this.students = this.oneStudent;
+        //this.students = this.oneStudent;
       } else{
         this.router.navigate(['/main/students']);
       }
 
+    } else{
+      this.getAllStudents();
     }
-
-    this.getAllStudents();
 
   }
 

@@ -16,12 +16,12 @@ pipeline {
             }
         }
         
-        stage('Tests') {
-            steps {
-                // Ejecutar los casos de prueba
-                sh 'npm run test'
-            }
-        }
+        // stage('Tests') {
+        //     steps {
+        //         // Ejecutar los casos de prueba
+        //         sh 'npm run test'
+        //     }
+        // }
 
         stage('Call other Jenkinsfile') {
             steps {

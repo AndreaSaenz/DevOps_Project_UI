@@ -1,10 +1,17 @@
 pipeline {
     agent any
     
-    stages {        
+    stages {       
+        stage('Move to directory'){
+            steps {
+                sh 'cd DevOps_Project_UI'
+            }
+        } 
+
         stage('Install') {
             steps {
                 // Instalar las dependencias de Node.js y Angular
+                
                 sh 'npm install'
             }
         }

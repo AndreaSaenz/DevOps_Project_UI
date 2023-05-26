@@ -7,7 +7,7 @@ pipeline {
         stage('Install') {
             steps {
                 // Instalar las dependencias de Node.js y Angular
-                sh 'cd DevOps_Project_UI'
+                sh 'cd DevOps_Project_UI/'
                 sh 'npm install'
             }
         }
@@ -15,7 +15,6 @@ pipeline {
         stage('Build') {
             steps {
                 // Compilar la aplicación Angular
-                sh 'cd DevOps_Project_UI'
                 sh 'npm run build'
             }
         }

@@ -10,12 +10,12 @@
   <h1>Iniciar Sesión</h1>
   <div class="container">
     <div class="card-body">
-      <form (submit)="logIn()">
+      <form (submit)="logIn(formulario)" #formulario="ngForm">
         <div class="form-group">
           <input
             type="text"
             [(ngModel)]="user.userName"
-            name="email"
+            name="userName"
             class="form-control"
             placeholder="Usuario"
             required
@@ -32,8 +32,11 @@
             required
           />
         </div>
-        <button class="btn btn-success btn-block">Acceder</button>
+        <button type="submit" class="btn btn-success btn-block">Acceder</button>
       </form>
+      <div>
+        <a routerLink="/register"> ¿No tienes una cuenta? Regístrate. </a>
+      </div>
     </div>
   </div>
 </div>

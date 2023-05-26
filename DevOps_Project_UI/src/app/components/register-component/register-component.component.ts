@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserServicesService } from 'src/app/services/user/user-services.service';
 import { Router } from '@angular/router';
+
+import { UserServicesService } from 'src/app/services/user/user-services.service';
 
 @Component({
   selector: 'app-register-component',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register-component.component.css'],
 })
 export class RegisterComponentComponent implements OnInit {
-  user: any;
+  user: any = {};
 
   constructor(private userAuth: UserServicesService, private router: Router) {}
 
@@ -17,7 +18,7 @@ export class RegisterComponentComponent implements OnInit {
   signUp() {
     this.userAuth.registerNewUser(this.user).subscribe((res) => {
       localStorage.setItem('token', res.token);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/main/students']);
     });
   }
 }

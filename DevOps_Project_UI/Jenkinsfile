@@ -6,6 +6,9 @@ pipeline {
         stage('test'){
             steps{
                 sh 'pwd'
+                sh 'cd DevOps_Project_UI/'
+                echo "Switch to DevOps Folder"
+                sh 'pwd'
             }
         }
 
@@ -13,6 +16,7 @@ pipeline {
         stage('Install') {
             steps {
                 // Instalar las dependencias de Node.js y Angular   
+                
                 sh 'npm install'
             }
         }

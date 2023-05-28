@@ -6,12 +6,6 @@ pipeline {
         stage('test'){
             steps{
                 sh 'pwd'
-                dir ('DevOps_Project_UI'){
-                    sh 'Inside DevOps_Project_UI/'
-                    sh 'pwd'
-                }
-                echo 'Folder: '
-                sh 'pwd'
             }
         }
 
@@ -19,15 +13,21 @@ pipeline {
         stage('Install') {
             steps {
                 // Instalar las dependencias de Node.js y Angular   
+                dir ('DevOps_Project_UI'){
+                    echo 'Inside DevOps_Project_UI/'
+                    sh 'npm install'
+                }
                 
-                sh 'npm install'
             }
         }
         
         stage('Build') {
             steps {
                 // Compilar la aplicación Angular
-                sh 'npm run build'
+                dir('DevOps_Project_UI'){
+                    sh 'npm run build'
+                }
+                
             }
         }
         
@@ -38,10 +38,10 @@ pipeline {
         //     }
         // }
 
-        stage('Call other Jenkinsfile') {
-            steps {
-                build job: 'DevOpsProject-UI-Deploy', parameters: [string(name: 'branch', value: "${GIT_BRANCH}"  ), string(name: 'buildNumber', value: "${BUILD_NUMBER}")]
-            }
-        }
+        // stage('Call other Jenkinsfile') {
+        //     steps {
+        //         build job: 'DevOpsProject-UI-Deploy', parameters: [string(name: 'branch', value: "${GIT_BRANCH}"  ), string(name: 'buildNumber', value: "${BUILD_NUMBER}")]
+        //     }
+        // }
     }
 }

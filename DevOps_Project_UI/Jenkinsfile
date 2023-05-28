@@ -38,10 +38,10 @@ pipeline {
         //     }
         // }
 
-        // stage('Call other Jenkinsfile') {
-        //     steps {
-        //         build job: 'DevOpsProject-UI-Deploy', parameters: [string(name: 'branch', value: "${GIT_BRANCH}"  ), string(name: 'buildNumber', value: "${BUILD_NUMBER}")]
-        //     }
-        // }
+        stage('Call other Jenkinsfile') {
+            steps {
+                build job: 'DevOpsProject-UI-Deploy', parameters: [string(name: 'branch', value: "${GIT_BRANCH}"  ), string(name: 'buildNumber', value: "${BUILD_NUMBER}")]
+            }
+        }
     }
 }

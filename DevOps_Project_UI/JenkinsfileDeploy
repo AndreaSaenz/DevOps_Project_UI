@@ -39,7 +39,7 @@ pipeline {
                     //     fi 
                     // '''
                     sh '''
-                        if docker containers -ls | grep "devops_project_ui-*" | xargs docker stop -f; then
+                        if docker container ls | grep "devops_project_ui-*" | xargs docker stop -f; then
                             echo "Contenedor detenido"
                         fi
                     '''

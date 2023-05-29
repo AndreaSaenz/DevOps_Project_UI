@@ -27,16 +27,21 @@ pipeline {
             steps {
                 // dir ('DevOps_Project_UI'){
                     // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+                    // sh '''
+                    //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+                    //     if [ -z $running]
+                    //     then 
+                    //         #Print error message 
+                    //         echo "No hay contenedores ejecutandose" 
+                    //     else 
+                    //         #Se apagan los contenedores con el mismo nombre 
+                    //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
+                    //     fi 
+                    // '''
                     sh '''
-                        running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-                        if [ -z $running]
-                        then 
-                            #Print error message 
-                            echo "No hay contenedores ejecutandose" 
-                        else 
-                            #Se apagan los contenedores con el mismo nombre 
-                            'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
-                        fi 
+                        if docker containers -ls |  grep "devops_project_ui-*"  | xargs docker stop -f; then
+                            echo "Contenedor detenido"
+                        fi
                     '''
                 
                 // }

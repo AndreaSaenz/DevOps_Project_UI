@@ -1,0 +1,56 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.btn.btn-primary{
+    float: right;
+}
+
+.table{
+    text-align: center;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: lightyellow;
+}
+
+i{
+    cursor: pointer;
+    font-size:larger; 
+}
+
+.btn-success{
+    margin-top: 1px;
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 1px;
+}
+
+.bi-pencil-square, .bi-check-square {
+    color: rgb(35, 208, 50); 
+    margin-top: 1px;
+}
+
+.btn-danger{
+    margin-top: 1px;
+    margin-left: 5px;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    padding: 1px;
+}
+
+.bi-trash3, .bi-x-square {
+    color: rgb(127, 21, 25);
+    margin-top: 1px;
+}

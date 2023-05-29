@@ -1,1 +1,138 @@
-<p>loans-table-component works!</p>
+<div class="container mt-4">
+    <div class="card" >
+      <div class="card-body bg-body-tertiary">
+        <span class="h3"> {{ title }} </span>
+        <div class="d-flex gap-2 d-md-flex justify-content-md-end"  style="white-space: nowrap; margin-top: 5px;">
+          <form (ngSubmit) ="searchLoanById(false, searchForm)" #searchForm="ngForm" class="d-inline-flex" role="search" >
+            <input class="form-control me-2 p-2" type="number" id="search" name="search" aria-label="Buscar préstamo por Id" ngModel #search="ngModel" aria-describedby="searchForm" placeholder="Buscar préstamo por Id numérico" required >
+            <button class="btn btn-outline-success btn-lg" type="submit" [disabled]="!searchForm.valid" title="Buscar por id" id="btnSearch">Buscar</button>
+            <button type="button" class="btn btn-primary btn-lg me-md-2" style="margin-right: auto; margin-left: 30px;" routerLink="/main/loans/new">Agregar préstamo</button>
+          </form>  
+        </div>
+        <h5 style="margin-top: 30px; margin-bottom: 20px;" *ngIf="loans.length == 0">No hay datos para mostrar</h5>
+        <form (ngSubmit) ="updateLoan(formulario)" #formulario="ngForm">
+          <div class="table-responsive-lg">
+            <table class="table table-striped mt-5 table-hover" *ngIf="loans.length > 0" >
+              <thead>
+                <tr>
+                  <th scope="col">Folio</th>
+                  <th scope="col">Estado devolución</th>
+                  <th scope="col">Fecha inicio préstamo</th>
+                  <th scope="col">Fecha estipulada devolución</th>
+                  <th scope="col">Observaciones</th>
+                  <th scope="col">Fecha real devolución</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let loan of loans" > <!--class="needs-validation" name="formulario1" novalidate>-->
+                
+                  <td> 
+                    <div >
+                      <div *ngIf="loan.editMode">
+                        <input class="form-control " type="number" id="loanFolio" name="loanFolio" aria-label="loanFolio" [(ngModel)]="loan.folio" #loanFolio="ngModel" readonly>
+                      </div>
+                      <div *ngIf="!loan.editMode" style="margin-top: 4px;">
+                        {{ loan.folio }}
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div *ngIf="loan.editMode">
+                      <input class="form-control form-check-input form-check-inline " type="checkbox" id="loanState" name="loanState" aria-label="loanState" [checked]="loan.estado" [(ngModel)]="loan.estado" #loanState="ngModel">  
+                      <small>La casilla marcada indica un préstamo DEVUELTO.</small> 
+                    </div>
+                    <div *ngIf="!loan.editMode " style="margin-top: 4px;">
+                        <div *ngIf="!loan.estado" style="margin-top: 4px; color: rgb(255, 0, 0);">
+                            <!--<input class="form-control form-check-input form-check-inline" type="checkbox" id="loanState" name="loanState" aria-label="loanState" [checked]="false" [(ngModel)]="loan.estado" #loanState="ngModel" style="pointer-events: none;" required  > -->
+                            NO DEVUELTO.
+                        </div>
+                        <div *ngIf="loan.estado" style="margin-top: 4px; color: rgb(44, 191, 14);">
+                            <!--<input class="form-control form-check-input form-check-inline" type="checkbox" id="loanState" name="loanState" aria-label="loanState" [checked]="true"  [(ngModel)]="loan.estado" #loanState="ngModel" style="pointer-events: none" required > -->
+                            DEVUELTO.
+                        </div>
+                    </div> 
+                  </td>
+                  <td> 
+                    <div >
+                      <div *ngIf="loan.editMode">
+                        <input class="form-control " type="datetime" id="loanStartDate" name="loanStartDate" aria-label="loanStartDate" [(ngModel)]="loan.fechaInicio" [ngModel]="loan.fechaInicio | date: 'dd/MM/yyyy hh:mm a'"  #loanStartDate="ngModel" disabled>
+                    </div>
+                      <div *ngIf="!loan.editMode" style="margin-top: 4px;">
+                        {{ loan.fechaInicio | date: 'dd/MM/yyyy hh:mm a' }}
+                      </div>
+                    </div>
+                  </td>
+                  <td> 
+                    <div >
+                      <div *ngIf="loan.editMode">
+                        <input class="form-control " type="datetime" id="loanExpectedReturnDate" name="loanExpectedReturnDate" aria-label="loanExpectedReturnDate" [(ngModel)]="loan.fechaEstipuladaDev" [ngModel]="loan.fechaEstipuladaDev | date: 'dd/MM/yyyy hh:mm a'"  #loanExpectedReturnDate="ngModel" required>
+                        <div *ngIf="loanExpectedReturnDate.invalid && (loanExpectedReturnDate.dirty || loanExpectedReturnDate.touched)">
+                            <div *ngIf="loanExpectedReturnDate.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                              Campo obligatorio.                
+                            </div>
+                          </div>
+                    </div>
+                      <div *ngIf="!loan.editMode" style="margin-top: 4px;">
+                        {{ loan.fechaEstipuladaDev | date: 'dd/MM/yyyy hh:mm a' }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="loan.editMode">
+                      <textarea class="form-control" id="loanObservation" name="loanObservation" aria-label="loanObservation" [(ngModel)]="loan.observacion" #loanObservation="ngModel" rows="3"></textarea>
+                    </div>
+                    <div *ngIf="!loan.editMode" style="margin-top: 4px;">
+                      {{ loan.observacion }}
+                    </div> 
+                  </td>
+                  <td> 
+                    <div >
+                      <div *ngIf="loan.editMode">
+                        <input class="form-control " type="datetime" id="loanRealReturnDate" name="loanRealReturnDate" aria-label="loanRealReturnDate" [(ngModel)]="loan.fechaRealDev" [ngModel]="loan.fechaRealDev | date: 'dd/MM/yyyy hh:mm a'"  #loanRealReturnDate="ngModel">
+                      </div>
+                      <div *ngIf="!loan.editMode" style="margin-top: 4px;">
+                        {{ loan.fechaRealDev | date: 'dd/MM/yyyy hh:mm a' }}
+                      </div>
+                    </div>
+                  </td>       
+                  <td>
+                    <div *ngIf="loan.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="submit" class="btn btn-success" [disabled]="!formulario.valid" title="Editar préstamo" id="updateLoan"> 
+                            <i class="bi bi-check-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="cancelEditMode(loan)" id="cancelEditMode" >
+                            <i class="bi bi-x-square"></i>
+                          </button>
+                        </a>
+                      </div>
+                      
+                    </div>
+                    <div *ngIf="!loan.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a><!--href="/main/loans/{{loan.id}}"-->
+                          <button type="button" class="btn btn-success" (click)="editModeOn(loan)" id="editModeOn"> 
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="deleteLoan(loan)" id="deleteLoan" >
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

@@ -39,7 +39,15 @@ pipeline {
                     //     fi 
                     // '''
                     sh '''
-                        docker stop $(docker ps --filter name=devops_ui*)
+                        running = $(docker ps --filter name=devops_ui*)
+                        if [ -z $running]
+                        then 
+                            #Print error message 
+                            echo "No hay contenedores ejecutandose" 
+                       else 
+                           #Se apagan los contenedores con el mismo nombre 
+                           docker stop $running
+                        fi
                     '''
                 
                 // }

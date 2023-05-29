@@ -29,13 +29,13 @@ pipeline {
                     // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
                     sh '''
 
-                        if [ -z $(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)]
+                        if [ -z $('docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq')]
                         then 
                             #Print error message 
                             echo "No hay contenedores ejecutandose" 
                         else 
                             #Se apagan los contenedores con el mismo nombre 
-                            docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop 
+                            'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
                         fi 
                     '''
                 

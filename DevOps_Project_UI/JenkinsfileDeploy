@@ -41,14 +41,17 @@ pipeline {
                 
             }
         }
-        // stage('Run container') {
-        //     steps {
-        //         sh 'docker container ls -a'
-        //         sh 'docker run -d -p 80:80 devops_project_ui-$simpleBranch:1.0.0-$buildNumber'
-        //         sh 'docker container ls -a'
-        //         sh 'docker container start devops_project_UI-$simpleBranch-$buildNumber'
-        //         sh 'docker container ls'
-        //     }
-        // }
+        stage('Run container') {
+            steps {
+                dir('DevOps_Project_UI'){
+                    sh 'docker container ls -a'
+                    sh 'docker run -d -p 80:80 devops_project_ui-$simpleBranch:1.0.0-$buildNumber'
+                    sh 'docker container ls -a'
+                    sh 'docker container start devops_project_UI-$simpleBranch-$buildNumber'
+                    sh 'docker container ls'
+                }
+                
+            }
+        }
     }
 }

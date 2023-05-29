@@ -12,80 +12,11 @@ import { StudentServicesService } from 'src/app/services/student/student-service
 })
 export class StudentsTableComponentComponent implements OnInit{
 
-  students1 : any[] = []; 
-
-  students2 : Array<StudentInterface> = []
+  students : Array<StudentInterface> = []
 
   backup: any = {};
   id: string | null;
   title = 'Alumnos';
-
-  students :  Array<StudentInterface>= [
-    {
-      "id": 65,
-      "Name": "Pepe",
-      "email": "Otto@email.com",
-      "telefono":"1818515",
-      "licenciatura": "lis",
-      "semestre": 4,
-      "editMode": false
-    },
-    {
-      "id": 66,
-      "Name": "Jacob",
-      "email": "Thornton@email.com",
-      "telefono":"1818556",
-      "licenciatura": "lic",
-      "semestre": 5,
-      "editMode": false
-    },
-    {
-      "id": 67,
-      "Name": "Larry the Bird",
-      "email": "Larry_the_Bird@email.com",
-      "telefono":"18455556",
-      "licenciatura": "lcc",
-      "semestre": 3,
-      "editMode": false
-    },
-    {
-      "id": 68,
-      "Name": "Larry the Bird",
-      "email": "Larry_the_Bird@email.com",
-      "telefono":"18455556",
-      "licenciatura": "lcc",
-      "semestre": 3,
-      "editMode": false
-    },
-    {
-      "id": 69,
-      "Name": "Larry the Bird",
-      "email": "Larry_the_Bird@email.com",
-      "telefono":"18455556",
-      "licenciatura": "lcc",
-      "semestre": 3,
-      "editMode": false
-    },
-    {
-      "id": 70,
-      "Name": "Larry the Bird",
-      "email": "Larry_the_Bird@email.com",
-      "telefono":"18455556",
-      "licenciatura": "lcc",
-      "semestre": 3,
-      "editMode": false
-    }
-  ]
-
-  oneStudent: Array<StudentInterface> = [{
-      "id": 75,
-      "Name": "Pepe",
-      "email": "Otto@email.com",
-      "telefono":"1818515",
-      "licenciatura": "lis",
-      "semestre": 4,
-      "editMode": false
-  }]
 
   constructor( private router: Router, private activatedRoute: ActivatedRoute, private studentService: StudentServicesService ) { 
     this.id = this.activatedRoute.snapshot.paramMap.get('studentId');
@@ -103,12 +34,23 @@ export class StudentsTableComponentComponent implements OnInit{
       "editMode": true
     };
     this.searchByIdMode();
+    this.students = [];
+
+    this.studentService.refreshNeeded.subscribe( () => {
+      if(this.id !== null){
+        this.getStudentById();
+      }
+      else {
+        this.getAllStudents();
+      }
+    });
+
   }
 
   reloadCurrentRoute() {
     const currentUrl = this.router.url;
     this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
-        this.router.navigate([currentUrl]);
+      this.router.navigate([currentUrl]);
     });
   }
 
@@ -121,43 +63,39 @@ export class StudentsTableComponentComponent implements OnInit{
   }
 
   searchStudentById( search: boolean, form: NgForm){
-    console.log(form.valid);
-    console.log(search);
-    console.log(form.value);
-    console.log(Object.values(form.value)[0]);
-    this.title = 'Alumno (' + Object.values(form.value)[0] + ')';
+    this.id = String(Object.values(form.value)[0]);
     this.router.navigate(['/main/students/', Object.values(form.value)[0]]);
-    console.log(this.title);
-    
+    this.searchByIdMode();
   }
 
   updateStudent(form: NgForm){
-    //Invocar método PUT del servicio
-    console.log(Object.values(form.value));
-    console.log(form.value);
-    console.log(Object.entries(form.value));
-    console.log(form.value.studentId);
+        
+    const studentToEdit: any ={
+      "Name": form.value.studentName,
+      "email": form.value.studentEmail,
+      "telefono": form.value.studentPhone,
+      "licenciatura": form.value.studentLic,
+      "semestre": form.value.studentSemester
+    }
     
-    /*
-    this.studentService.updateStudent(form.value.studentId, form.value).subscribe({
+    this.studentService.updateStudent(form.value.studentId, studentToEdit).subscribe({
       next: (val: any) => {
-        window.alert(`Alumno actualizado}`);
+        window.alert(`Alumno actualizado`);
       },
       error: (err: any) => {
         console.error(err);
       },
     });
   
-    */
-    
     this.students.forEach(element => {
       element.editMode = false;
     });
+
     if(this.title == 'Alumnos' ){
-      this.reloadCurrentRoute();
+      this.router.navigate(['/main/students']);
     }
     else{
-      this.router.navigate(['/main/students']);
+      this.router.navigate(['/main/students', form.value.studentId]);
     }
   }
 
@@ -168,134 +106,66 @@ export class StudentsTableComponentComponent implements OnInit{
   }
 
   deleteStudent(student: any){
-    //Invocar método DELETE del servicio 
-    //
-    /*
-    this.studentService.deleteStudent(student.id).subscribe(data => {
-      window.alert(`Alumno eliminado}`);
-      this.getAllStudents();
-    });
     
-    */
-    /*
-    this.studentService.deleteStudent(student.id).subscribe({
-      next: (res) => {
-        this.getAllStudents();
-      },
-      error: window.alert,
+    this.studentService.deleteStudent(student.id).subscribe(data => {
+      window.alert(`Alumno eliminado`);
     });
-    /**/
-    console.log("Eliminando alumno");
-    if(this.title == 'Alumnos' ){
-      this.reloadCurrentRoute();
-    }
-    else{
-      this.router.navigate(['/main/students']);
-    }
-    //this.router.navigate(['/main/students']);
+
+    this.router.navigate(['/main/students']);
+
   }
 
   getAllStudents(){
-/*  this.studentService.getAllStudents().subscribe(data => {
-      data.forEach((element: any) => {
-        var student: StudentInterface = {
-          id: element.payload.doc.id, //id: element.payload.data()['id'],
-          Name: element.payload.doc.Name, //: element.payload.data()['Name'],
-          email: element.payload.doc.email, //email: element.payload.data()['email'],
-          telefono: element.payload.doc.telefono, //telefono: element.payload.data()['telefono'],
-          licenciatura: element.payload.doc.licenciatura, //licenciatura: element.payload.data()['licenciatura'],
-          semestre: element.payload.doc.semestre, //semestre: element.payload.data()['semestre'],
-          editMode: false
-        }
-        this.students2.push(student)
-      });
-      console.log(this.students2);
-    });*/
 
-//Otra posible manera
-/*  this.studentService.getAllStudents().subscribe(data => {
-      next: (val: any) => {
-        data.forEach((element: any) => {
-          var student: StudentInterface = {
-            id: element.payload.doc.id, //id: element.payload.data()['id'],
-            Name: element.payload.doc.Name, //: element.payload.data()['Name'],
-            email: element.payload.doc.email, //email: element.payload.data()['email'],
-            telefono: element.payload.doc.telefono, //telefono: element.payload.data()['telefono'],
-            licenciatura: element.payload.doc.licenciatura, //licenciatura: element.payload.data()['licenciatura'],
-            semestre: element.payload.doc.semestre, //semestre: element.payload.data()['semestre'],
-            editMode: false
-          }
-          this.students2.push(student)
-        });
-        console.log(this.students2);
-      },
-      error: (error: any) => {
-        console.error(error);
-        window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
-      },
-    });*/
+    try {
+      this.studentService.getAllStudents().subscribe(data => {
+        this.students = [];
+        
+        for (var element of data) {
+          this.students.push({
+            ...element,
+            "editMode": false
+          })
+        }
+
+      });
+    } catch (error: any) {
+      window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+      this.students = [];
+    }
 
   }
 
   getStudentById(){
- /* this.studentService.getStudentById(Number(this.id)).subscribe(data => {
-      var student: StudentInterface = {
-        id: data.payload.doc.id, //id: data.payload.data()['id'],
-        Name: data.payload.doc.Name, //: data.payload.data()['Name'],
-        email: data.payload.doc.email, //email: data.payload.data()['email'],
-        telefono: data.payload.doc.telefono, //telefono: data.payload.data()['telefono'],
-        licenciatura: data.payload.doc.licenciatura, //licenciatura: data.payload.data()['licenciatura'],
-        semestre: data.payload.doc.semestre, //semestre: data.payload.data()['semestre'],
-        editMode: false
-      }
-      this.students2.push(student)          
-    })*/
 
-    //Otra posible manera
-  /*this.studentService.getStudentById(Number(this.id)).subscribe(data => {
-      next: (val: any) => {
-        var student: StudentInterface = {
-          id: data.payload.doc.id, //id: data.payload.data()['id'],
-          Name: data.payload.doc.Name, //: data.payload.data()['Name'],
-          email: data.payload.doc.email, //email: data.payload.data()['email'],
-          telefono: data.payload.doc.telefono, //telefono: data.payload.data()['telefono'],
-          licenciatura: data.payload.doc.licenciatura, //licenciatura: data.payload.data()['licenciatura'],
-          semestre: data.payload.doc.semestre, //semestre: data.payload.data()['semestre'],
-          editMode: false
-        }
-        this.students2.push(student)   
+    try {
+      this.studentService.getStudentById(Number(this.id)).subscribe(data => {
+        this.students = [];
+        this.students.push({
+          ...data,
+          "editMode": false
+        })     
+      });
+    } catch (error: any) {
+      window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
+    }
 
-        this.router.navigate(['/main/students']);
-      },
-      error: (error: any) => {
-        console.error(error);
-        window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
-      },
-    });*/
   }
 
   searchByIdMode(){
-    /*if(this.id !== null){
-      this.title = 'Alumno (' + this.id + ')';
-      this.students = this.oneStudent;
-
-    }*/
-    console.log(this.title);
+    
     if(this.id !== null){
       this.title = 'Alumno (' + this.id + ')';
-      if( !Number.isNaN(Number(this.id))){
-        //this.title = 'Alumno (' + this.id + ')';
-      
-        this.getStudentById();
 
-        this.students = this.oneStudent;
+      if( !Number.isNaN(Number(this.id))){
+        this.students = [];
+        this.getStudentById();
       } else{
         this.router.navigate(['/main/students']);
       }
-
+    } else{
+      this.getAllStudents();
     }
-
-    this.getAllStudents();
 
   }
 

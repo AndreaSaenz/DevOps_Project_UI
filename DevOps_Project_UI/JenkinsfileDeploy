@@ -39,9 +39,7 @@ pipeline {
                     //     fi 
                     // '''
                     sh '''
-                        if docker container ls | grep "devops_project_ui-*" | xargs docker stop -f; then
-                            echo "Contenedor detenido"
-                        fi
+                        docker stop $(docker ps --filter ancestor=devops_project_ui)
                     '''
                 
                 // }

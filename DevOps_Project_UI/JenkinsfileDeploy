@@ -39,7 +39,7 @@ pipeline {
                     //     fi 
                     // '''
                     sh '''
-                        running = $(docker ps --filter name=devops_ui* --filter status=running -aq)
+                        running=$(docker ps --filter name=devops_ui* --filter status=running -aq)
                         if [ -z $running]
                         then 
                             #Print error message 

@@ -3,13 +3,6 @@ pipeline {
     
     stages {       
 
-        stage('test'){
-            steps{
-                sh 'pwd'
-            }
-        }
-
-
         stage('Install') {
             steps {
                 // Instalar las dependencias de Node.js y Angular   
@@ -30,12 +23,12 @@ pipeline {
             }
         }
         
-        // stage('Tests') {
-        //     steps {
-        //         // Ejecutar los casos de prueba
-        //         sh 'npm run test'
-        //     }
-        // }
+        stage('Tests') {
+            steps {
+                // Ejecutar los casos de prueba
+                sh 'ng test --browsers=ChromeHeadless --watch=false'
+            }
+        }
 
         stage('Call other Jenkinsfile') {
             steps {

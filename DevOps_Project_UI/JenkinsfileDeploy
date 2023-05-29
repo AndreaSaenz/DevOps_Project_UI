@@ -7,11 +7,6 @@ pipeline {
     stages {
         stage('Create Docker Image') {
             steps {
-                // script {
-                //     def simpleBranch = branch.split("/")[0]
-                // }
-                // sh 'def simpleBranch = branch.replace("origin/", "")'
-
                 sh 'echo $branch'
                 sh 'docker image ls -a'
                 // sh 'docker build -t devops_project_ui-$simpleBranch:1.0.0-$buildNumber .'
@@ -25,19 +20,6 @@ pipeline {
         }
         stage('Stop containers') {
             steps {
-                // dir ('DevOps_Project_UI'){
-                    // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-                    // sh '''
-                    //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-                    //     if [ -z $running]
-                    //     then 
-                    //         #Print error message 
-                    //         echo "No hay contenedores ejecutandose" 
-                    //     else 
-                    //         #Se apagan los contenedores con el mismo nombre 
-                    //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
-                    //     fi 
-                    // '''
                     sh '''
                         running=$(docker ps --filter name=devops_ui* --filter status=running -aq)
                         if [ -z $running]

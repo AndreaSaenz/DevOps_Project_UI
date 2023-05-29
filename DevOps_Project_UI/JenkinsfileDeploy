@@ -1,14 +1,14 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'branch', defaultValue: 'develop', description: 'Descripción del parámetro 1')
+        string(name: 'branch', defaultValue: '$GIT_BRANCH', description: 'Descripción del parámetro 1')
         string(name: 'buildNumber', defaultValue: '$BUILD_NUMBER', description: 'Descripción del parámetro 2')
     }
     stages {
         stage('Create Docker Image') {
             steps {
                 script {
-                    def simpleBranch = branch.split("/")[1]
+                    def simpleBranch = branch.split("/")[0]
                 }
                 // sh 'def simpleBranch = branch.replace("origin/", "")'
                 sh 'echo $simpleBranch'

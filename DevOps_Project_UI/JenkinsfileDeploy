@@ -47,7 +47,7 @@ pipeline {
                     sh 'docker container ls -a'
                     sh 'docker run -d -p 80:80 devops_project_ui-$branch:1.0.0-$buildNumber'
                     sh 'docker container ls -a'
-                    sh 'docker container start devops_project_UI-$branch-$buildNumber'
+                    sh 'docker container start devops_project_ui-$branch:1.0.0-$buildNumber'
                     sh 'docker container ls'
                 }
                 

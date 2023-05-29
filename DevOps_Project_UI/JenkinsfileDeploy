@@ -27,7 +27,7 @@ pipeline {
             steps {
                 dir ('DevOps_Project_UI'){
                     sh '''
-                        running=(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+                        running=docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq
                         if [ -z $running]
                         then 
                             #Print error message 

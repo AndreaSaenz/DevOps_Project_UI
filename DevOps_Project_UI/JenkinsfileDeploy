@@ -25,7 +25,7 @@ pipeline {
         }
         stage('Stop containers') {
             steps {
-                dir ('DevOps_Project_UI'){
+                // dir ('DevOps_Project_UI'){
                     // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
                     sh '''
 
@@ -39,7 +39,7 @@ pipeline {
                         fi 
                     '''
                 
-                }
+                // }
                 
             }
         }

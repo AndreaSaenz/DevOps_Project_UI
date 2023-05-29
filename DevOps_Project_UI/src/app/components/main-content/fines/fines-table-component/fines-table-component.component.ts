@@ -12,91 +12,20 @@ import { FineServicesService } from 'src/app/services/fine/fine-services.service
 })
 export class FinesTableComponentComponent {
 
-  fines1 : any[] = []; 
-
-  fines2 : Array<FineInterface> = []
+  fines : Array<FineInterface> = []
 
   backup: any = {};
   id: string | null;
   title = 'Multas';
 
-  fines :  Array<FineInterface> = [
-    {
-      "id": 65,
-      "monto": 220.00,
-      "observacion": "asdfgbhnjm,.sfgdfgsd",
-      "folioSolicitud": 16000,
-      "estado": true,
-      "fecha": new Date(),
-      "editMode": false
-    },
-    {
-      "id": 66,
-      "monto": 220.00,
-      "observacion": "asdfgbhnjm,.sfgdfgsd",
-      "folioSolicitud": 16000,
-      "estado": true,
-      "fecha": new Date(),
-      "editMode": false
-    },
-    {
-      "id": 67,
-      "monto": 550.00,
-      "observacion": "asdfgbefrgthnjm,.sfgdfgsd",
-      "folioSolicitud": 5,
-      "estado": true,
-      "fecha": new Date(),
-      "editMode": false
-    },
-    {
-      "id": 68,
-      "monto": 550.00,
-      "observacion": "asdfgbefrgthnjm,.sfgdfgsd",
-      "folioSolicitud": 10,
-      "estado": false,
-      "fecha": new Date(),
-      "editMode": false
-    },
-    {
-      "id": 69,
-      "monto": 550.00,
-      "observacion": "asdfgbefrgthnjm,.sfgdfgsd",
-      "folioSolicitud": 8,
-      "estado": true,
-      "fecha": new Date('1995-12-17T13:24:00'),
-      "editMode": false
-    },
-    {
-      "id": 70,
-      "monto": 500.00,
-      "observacion": "asdfgbefrgthnjm,.sfgdfgsd",
-      "folioSolicitud": 5,
-      "estado": false,
-      "fecha": new Date(),
-      "editMode": false
-    }
-  ]
-
-  oneFine: Array<FineInterface> = [{
-      "id": 75,
-      "monto": 550.00,
-      "observacion": "asdfgbefrgthn",
-      "folioSolicitud": 15,
-      "estado": true,
-      "fecha": new Date(),
-      "editMode": false
-  }]
- 
-
   constructor( private router: Router, private activatedRoute: ActivatedRoute, private fineService: FineServicesService ) { 
     this.id = this.activatedRoute.snapshot.paramMap.get('fineId');
-    console.log(this.id);
   }
 
   ngOnInit(): void {
     this.backup = {
       "id": 0,
-      "monto": new Float32Array(0.00),
+      "monto": 0.00,
       "observacion": "",
       "folioSolicitud": 0,
       "estado": false,
@@ -104,7 +33,7 @@ export class FinesTableComponentComponent {
       "editMode": true
     };
     this.searchByIdMode();
-    //this.fines2 = [];
+    this.fines = [];
 
     this.fineService.refreshNeeded.subscribe( () => {
       if(this.id !== null){
@@ -133,24 +62,13 @@ export class FinesTableComponentComponent {
   }
 
   searchFineById( search: boolean, form: NgForm){
-    //console.log(form.valid);
-    //console.log(search);
-    //console.log(form.value);
-    //console.log(Object.values(form.value)[0]);
     this.id = String(Object.values(form.value)[0]);
-    //this.title = 'Multa (' + Object.values(form.value)[0] + ')';
     this.router.navigate(['/main/fines/', Object.values(form.value)[0]]);
-    //console.log(this.title);
     this.searchByIdMode();
     
   }
 
   updateFine(form: NgForm){
-    //Invocar método PUT del servicio
-    //console.log(Object.values(form.value));
-    //console.log(form.value);
-    //console.log(Object.entries(form.value));
-    //console.log(form.value.fineId);
 
     const fineToEdit: any ={
       "monto": form.value.fineAmount,
@@ -188,9 +106,7 @@ export class FinesTableComponentComponent {
   }
 
   deleteFine(fine: any){
-    //Invocar método DELETE del servicio 
-    //
-    
+  
     this.fineService.deleteFine(fine.id).subscribe(data => {
       window.alert(`Multa eliminada`);
     });
@@ -202,10 +118,10 @@ export class FinesTableComponentComponent {
 
     try {
       this.fineService.getAllFines().subscribe(data => {
-        this.fines2 = [];
+        this.fines = [];
         
         for (var element of data) {
-          this.fines2.push({
+          this.fines.push({
             ...element,
             "editMode": false
           })
@@ -214,7 +130,7 @@ export class FinesTableComponentComponent {
       });
     } catch (error: any) {
       window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
-      this.fines2 = [];
+      this.fines = [];
     }
 
   }
@@ -222,10 +138,9 @@ export class FinesTableComponentComponent {
   getFineById(){
 
     try {
-      console.log("aja");
       this.fineService.getFineById(Number(this.id)).subscribe(data => {
-        this.fines2 = [];
-        this.fines2.push({
+        this.fines = [];
+        this.fines.push({
           ...data,
           "editMode": false
         })     
@@ -242,21 +157,13 @@ export class FinesTableComponentComponent {
       this.title = 'Multa (' + this.id + ')';
 
       if( !Number.isNaN(Number(this.id))){
-        this.fines2 = [];    
+        this.fines = [];    
         this.getFineById();
-     
-        this.fines2 = this.oneFine;
       } else{
         this.router.navigate(['/main/fines']);
       }
     } else{
-      this.fines2.push(this.fines[0]);
-      console.log("hey" + this.fines2);
-      this.fines2 = this.fines;
-      console.log(this.fines2[1]);
-      
-      //this.getAllFines();
-      
+      this.getAllFines();
     }    
 
   }

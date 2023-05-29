@@ -30,10 +30,6 @@ export class CreateFineComponentComponent {
       "folioSolicitud": this.newFine.value.folioSolicitud,
       "estado": this.newFine.value.estado
     }
-    //console.log(fine);
-    //console.log(fine.Name);
-    //console.log(this.newFine);
-    //console.log(localStorage.getItem('token'));
 
     this.fineService.createFine(fine).subscribe({
       next: (val: any) => {

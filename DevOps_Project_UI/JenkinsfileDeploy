@@ -37,7 +37,8 @@ pipeline {
                     //         docker ps --filter name=devops_project_ui-$branch* --filter status=running -aq | xargs docker stop 
                     //     fi 
                     // '''
-                    sh 'docker ps --filter name=devops_project_ui-$branch* --filter status=running -aq | xargs docker stop'
+                    // sh 'docker ps --filter name=devops_project_ui-$branch* --filter status=running -aq | xargs docker stop'
+                    sh 'docker stop $(docker ps -qf "name=devops_project_ui-*")'
                 }
                 
             }

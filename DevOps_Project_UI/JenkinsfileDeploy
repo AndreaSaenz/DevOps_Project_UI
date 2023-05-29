@@ -28,7 +28,7 @@ pipeline {
                 dir ('DevOps_Project_UI'){
                     sh '''
                         running=$(docker ps --filter name=devops_project_ui-$branch* --filter status=running -aq)
-                        if [ -z $running]
+                        if [[ -z $running ]]
                         then 
                             #Print error message 
                             echo "No hay contenedores ejecutandose" 

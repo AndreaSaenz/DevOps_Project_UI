@@ -16,10 +16,11 @@ export class CreateComputerComponentComponent {
   constructor(private router: Router, private formBuilder: FormBuilder, private computerService: ComputerServicesService){
     this.newComputer = this.formBuilder.group({
       Name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email, Validators.pattern('.+@.+\.com')]],
-      telefono: ['', Validators.pattern('[0-9]{3}-[0-9]{3}-[0-9]{4}')],
-      licenciatura: [''],
-      semestre: ['', [Validators.min(0), Validators.max(30)]]
+      yearModel: ['', [Validators.required, Validators.pattern('[0-9]{4}'), Validators.min(1)]],
+      memory: ['',  Validators.pattern('[0-9]*')],
+      monitorSize: [''],
+      ram: ['', Validators.pattern('[0-9]*')],
+      processor: ['', Validators.required]
     })
   }
 
@@ -27,14 +28,12 @@ export class CreateComputerComponentComponent {
     
     const computer: any ={
       "Name": this.newComputer.value.Name,
-      "email": this.newComputer.value.email,
-      "telefono": this.newComputer.value.telefono,
-      "licenciatura": this.newComputer.value.licenciatura,
-      "semestre": this.newComputer.value.semestre
+      "yearModel": this.newComputer.value.yearModel,
+      "memory": Number(this.newComputer.value.memory),
+      "monitorSize": this.newComputer.value.monitorSize,
+      "ram": Number(this.newComputer.value.ram),
+      "processor": this.newComputer.value.processor ,
     }
-    console.log(computer);
-    console.log(computer.Name);
-    console.log(this.newComputer);
 
     this.computerService.createComputer(computer).subscribe({
       next: (val: any) => {

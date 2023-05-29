@@ -23,29 +23,29 @@ pipeline {
                 
             }
         }
-        // stage('Stop containers') {
-        //     steps {
-        //         // dir ('DevOps_Project_UI'){
-        //             // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-        //             // sh '''
-        //             //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-        //             //     if [ -z $running]
-        //             //     then 
-        //             //         #Print error message 
-        //             //         echo "No hay contenedores ejecutandose" 
-        //             //     else 
-        //             //         #Se apagan los contenedores con el mismo nombre 
-        //             //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
-        //             //     fi 
-        //             // '''
-        //             sh '''
-        //                 docker stop $(docker ps --filter name=devops_ui*)
-        //             '''
+        stage('Stop containers') {
+            steps {
+                // dir ('DevOps_Project_UI'){
+                    // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+                    // sh '''
+                    //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+                    //     if [ -z $running]
+                    //     then 
+                    //         #Print error message 
+                    //         echo "No hay contenedores ejecutandose" 
+                    //     else 
+                    //         #Se apagan los contenedores con el mismo nombre 
+                    //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
+                    //     fi 
+                    // '''
+                    sh '''
+                        docker stop $(docker ps --filter name=devops_ui*)
+                    '''
                 
-        //         // }
+                // }
                 
-        //     }
-        // }
+            }
+        }
         stage('Run container') {
             steps {
                 dir('DevOps_Project_UI'){

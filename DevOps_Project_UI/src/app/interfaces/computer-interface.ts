@@ -3,8 +3,8 @@ export interface ComputerInterface {
     "Name": string, //no null
     "yearModel": number,   //no null     
     "memory": number, 
-    "monitorSize": string,
-    "ram": number, 
+    "monitorSize": string ,
+    "ram": number , 
     "processor": string //no null,
     "editMode": boolean
 }

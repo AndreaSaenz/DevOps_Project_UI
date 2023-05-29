@@ -23,34 +23,34 @@ pipeline {
                 
             }
         }
-        stage('Stop containers') {
-            steps {
-                // dir ('DevOps_Project_UI'){
-                    // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-                    // sh '''
-                    //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
-                    //     if [ -z $running]
-                    //     then 
-                    //         #Print error message 
-                    //         echo "No hay contenedores ejecutandose" 
-                    //     else 
-                    //         #Se apagan los contenedores con el mismo nombre 
-                    //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
-                    //     fi 
-                    // '''
-                    sh '''
-                        docker stop $(docker ps --filter ancestor=devops_project_ui)
-                    '''
+        // stage('Stop containers') {
+        //     steps {
+        //         // dir ('DevOps_Project_UI'){
+        //             // running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+        //             // sh '''
+        //             //     running=$(docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq)
+        //             //     if [ -z $running]
+        //             //     then 
+        //             //         #Print error message 
+        //             //         echo "No hay contenedores ejecutandose" 
+        //             //     else 
+        //             //         #Se apagan los contenedores con el mismo nombre 
+        //             //         'docker ps --filter "name=devops_project_ui-*" --filter "status=running" -aq | xargs docker stop' 
+        //             //     fi 
+        //             // '''
+        //             sh '''
+        //                 docker stop $(docker ps --filter name=devops_ui*)
+        //             '''
                 
-                // }
+        //         // }
                 
-            }
-        }
+        //     }
+        // }
         stage('Run container') {
             steps {
                 dir('DevOps_Project_UI'){
                     sh 'docker container ls -a'
-                    sh 'docker run -d -p 4000:80 devops_project_ui-$branch:1.0.0-$buildNumber'
+                    sh 'docker run -d --name devops_ui-$buildNumber -p 4000:80 devops_project_ui-$branch:1.0.0-$buildNumber'
                 }
                 
             }

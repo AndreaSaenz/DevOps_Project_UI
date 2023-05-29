@@ -14,7 +14,6 @@ pipeline {
             steps {
                 // Instalar las dependencias de Node.js y Angular   
                 dir ('DevOps_Project_UI'){
-                    echo 'Inside DevOps_Project_UI/'
                     sh 'npm install'
                 }
                 

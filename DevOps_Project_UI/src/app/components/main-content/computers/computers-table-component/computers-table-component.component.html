@@ -1,1 +1,155 @@
-<p>computers-table-component works!</p>
+<div class="container mt-4">
+    <div class="card" >
+      <div class="card-body bg-body-tertiary">
+        <span class="h3"> {{ title }} </span>
+        <div class="d-flex gap-2 d-md-flex justify-content-md-end"  style="white-space: nowrap; margin-top: 5px;">
+          <form (ngSubmit) ="searchComputerById(false, searchForm)" #searchForm="ngForm" class="d-inline-flex" role="search" >
+            <input class="form-control me-2 p-2" type="number" id="search" name="search" aria-label="Buscar computadora por Id" ngModel #search="ngModel" aria-describedby="searchForm" placeholder="Buscar computadora por Id numérico" required >
+            <button class="btn btn-outline-success btn-lg" type="submit" [disabled]="!searchForm.valid" title="Buscar por id" id="btnSearch">Buscar</button>
+            <button type="button" class="btn btn-primary btn-lg me-md-2" style="margin-right: auto; margin-left: 30px;" routerLink="/main/computers/new">Agregar computadora</button>
+          </form>  
+        </div>
+        <h5 style="margin-top: 30px; margin-bottom: 20px;" *ngIf="computers.length == 0">No hay datos para mostrar</h5>
+        <form (ngSubmit) ="updateComputer(formulario)" #formulario="ngForm">
+          <div class="table-responsive-lg">
+            <table class="table table-striped mt-5 table-hover" *ngIf="computers.length > 0" >
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Año del modelo</th>
+                  <th scope="col">Memoria (MB)</th>
+                  <th scope="col">Tamaño de monitor</th>
+                  <th scope="col">RAM (MB)</th>
+                  <th scope="col">Procesador</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let computer of computers" > 
+                
+                  <td> 
+                    <div >
+                      <div *ngIf="computer.editMode">
+                        <input class="form-control " type="number" id="computerId" name="computerId" aria-label="computerId" [(ngModel)]="computer.id" #computerId="ngModel" readonly>
+                      </div>
+                      <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                        {{ computer.id }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerName" name="computerName" aria-label="computerName" [(ngModel)]="computer.Name" #computerName="ngModel" required/>
+                      <div *ngIf="computerName.invalid && (computerName.dirty || computerName.touched)">
+                        <div *ngIf="computerName.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.Name }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="number" id="computerYearModel" name="computerYearModel" aria-label="computerYearModel" pattern="[0-9]{4}" [(ngModel)]="computer.yearModel" #computerYearModel="ngModel" min="1" required/>
+                      <small>Entrada numérica mayor a 0 con formato numérico de año: YYYY.</small>
+                      <div *ngIf="computerYearModel.invalid && (computerYearModel.dirty || computerYearModel.touched)">
+                        <div *ngIf="computerYearModel.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                        <div *ngIf="!computerYearModel.errors?.['min']" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                          Entrada no permitida.             
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.yearModel }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control"  type="text" id="computerMemory" name="computerMemory" aria-label="computerMemory" pattern="[0-9]*" [(ngModel)]="computer.memory" #computerMemory="ngModel" min="1"  > <!-- required/> --> 
+                      <small>Entrada numérica mayor a 0.</small>
+                      <div *ngIf="computerMemory.invalid && (computerMemory.dirty || computerMemory.touched)" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                        Memoria inválida.               
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.memory }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerMonitorSize" name="computerMonitorSize" aria-label="computerMonitorSize" [(ngModel)]="computer.monitorSize" #computerMonitorSize="ngModel"> <!-- required/>  -->
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.monitorSize }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerRAM" name="computerRAM" aria-label="computerRAM" pattern="[0-9]*" [(ngModel)]="computer.ram" #computerRAM="ngModel" min="1"> <!-- required/> --> 
+                      <small>Entrada numérica igual o mayor a 0.</small>  
+                      <div *ngIf="computerRAM.invalid && (computerRAM.dirty || computerRAM.touched)" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                        RAM inválida.             
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.ram }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode">
+                      <input class="form-control" type="text" id="computerProcessor" name="computerProcessor" aria-label="computerProcessor" [(ngModel)]="computer.processor" #computerProcessor="ngModel" required/> 
+                      <div *ngIf="computerProcessor.invalid && (computerProcessor.dirty || computerProcessor.touched)">
+                        <div *ngIf="computerProcessor.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!computer.editMode" style="margin-top: 4px;">
+                      {{ computer.processor }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="computer.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="submit" class="btn btn-success" [disabled]="!formulario.valid" title="Editar computadora" id="updateComputer"> 
+                            <i class="bi bi-check-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="cancelEditMode(computer)" id="cancelEditMode" >
+                            <i class="bi bi-x-square"></i>
+                          </button>
+                        </a>
+                      </div>
+                      
+                    </div>
+                    <div *ngIf="!computer.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="button" class="btn btn-success" (click)="editModeOn(computer)" id="editModeOn"> 
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="deleteComputer(computer)" id="deleteComputer" >
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

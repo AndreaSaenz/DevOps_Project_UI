@@ -1,1 +1,63 @@
-<p>create-computer-component works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card" >
+                <div class="card-body">
+                    <div class="text-center">
+                        <span class="h3"> Agregar computadora </span>
+                    </div>
+                    <form class="mt-4" [formGroup]="newComputer" (ngSubmit)="createComputer()" >
+                        <div>
+                            <label id="name">Nombre</label>
+                            <input type="text" class="form-control form-control-lg-mt-3" formControlName="Name" placeholder="Nombre">
+                            <div *ngIf="newComputer.controls['Name'].invalid && newComputer.controls['Name'].touched" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Campo vacío no permitido.               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Año del modelo</label>
+                                <input type="number" class="form-control form-control-lg-mt-3" formControlName="yearModel" placeholder="Ejemplo: 2018">
+                                <div *ngIf="newComputer.controls['yearModel'].invalid && newComputer.controls['yearModel'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Campo obligatorio con formato numérico de año: YYYY.           
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label>Memoria (MB)</label>
+                                <input type="text" class="form-control form-control-lg-mt-3" formControlName="memory" placeholder="Ejemplo: 8000">
+                                <div *ngIf="newComputer.controls['memory'].invalid && newComputer.controls['memory'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Se espera un número mayor a 0.                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Tamaño del monitor</label>
+                                <input type="text" class="form-control form-control-lg-mt-3" formControlName="monitorSize" placeholder="Ejemplo: 24 pulgadas">
+                            </div>
+                            <div class="col">
+                                <label>RAM (MB)</label>
+                                <input type="text" class="form-control form-control-lg-mt-3" formControlName="ram" placeholder="Ejemplo: 8000">
+                                <div *ngIf="newComputer.controls['ram'].invalid && newComputer.controls['ram'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Se espera un número mayor a 0.           
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label id="name">Procesador</label>
+                            <input type="text" class="form-control form-control-lg-mt-3" formControlName="processor" placeholder="Procesador">
+                            <div *ngIf="newComputer.controls['processor'].invalid && newComputer.controls['processor'].touched" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Campo vacío no permitido.               
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" [disabled]="!newComputer.valid" class="btn btn-success btn-lg me-md-2">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+

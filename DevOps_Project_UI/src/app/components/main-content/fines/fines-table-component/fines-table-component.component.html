@@ -1,1 +1,150 @@
-<p>fines-table-component works!</p>
+<div class="container mt-4">
+    <div class="card" >
+      <div class="card-body bg-body-tertiary">
+        <span class="h3"> {{ title }} </span>
+        <div class="d-flex gap-2 d-md-flex justify-content-md-end"  style="white-space: nowrap; margin-top: 5px;">
+          <form (ngSubmit) ="searchFineById(false, searchForm)" #searchForm="ngForm" class="d-inline-flex" role="search" >
+            <input class="form-control me-2 p-2" type="number" id="search" name="search" aria-label="Buscar multa por Id" ngModel #search="ngModel" aria-describedby="searchForm" placeholder="Buscar multa por Id numérico" required >
+            <button class="btn btn-outline-success btn-lg" type="submit" [disabled]="!searchForm.valid" title="Buscar por id" id="btnSearch">Buscar</button>
+            <button type="button" class="btn btn-primary btn-lg me-md-2" style="margin-right: auto; margin-left: 30px;" routerLink="/main/fines/new">Agregar multa</button>
+          </form>  
+        </div>
+        <h5 style="margin-top: 30px; margin-bottom: 20px;" *ngIf="fines2.length == 0">No hay datos para mostrar</h5>
+        <form (ngSubmit) ="updateFine(formulario)" #formulario="ngForm">
+          <div class="table-responsive-lg">
+            <table class="table table-striped mt-5 table-hover" *ngIf="fines2.length > 0" >
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Monto</th>
+                  <th scope="col">Observacion</th>
+                  <th scope="col">Folio Solicitud</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Fecha inicio</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let fine of fines2; let i = index" > 
+                
+                  <td> 
+                    <div >
+                      <div *ngIf="fine.editMode">
+                        <input class="form-control " type="number" id="fineId" name="fineId" aria-label="fineId" [(ngModel)]="fine.id" #fineId="ngModel" readonly>
+                      </div>
+                      <div *ngIf="!fine.editMode" style="margin-top: 4px;">
+                        {{ fine.id }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="fine.editMode">
+                      <input class="form-control" type=number step=0.01 id="fineAmount" name="fineAmount" aria-label="fineAmount" pattern="[0-9]*\.[0-9]{2}" [(ngModel)]="fine.monto" #fineAmount="ngModel" required/>
+                      <small>Entrada con formato monetario mayor a 0. Ejemplo: 200.00.</small>
+                      <div *ngIf="fineAmount.invalid && (fineAmount.dirty || fineAmount.touched)">
+                        <div *ngIf="fineAmount.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.              
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!fine.editMode" style="margin-top: 4px;">
+                      {{ fine.monto }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="fine.editMode">
+                      <textarea class="form-control" id="fineObservation" name="fineObservation" aria-label="fineObservation" [(ngModel)]="fine.observacion" #fineObservation="ngModel" rows="3" required></textarea>
+                      <div *ngIf="fineObservation.invalid && (fineObservation.dirty || fineObservation.touched)">
+                        <div *ngIf="fineObservation.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                          Campo vacío no permitido.               
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="!fine.editMode" style="margin-top: 4px;">
+                      {{ fine.observacion }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="fine.editMode">
+                        <input class="form-control" type="number" id="fineLoanId" name="fineLoanId" aria-label="fineLoanId" [(ngModel)]="fine.folioSolicitud" #fineLoanId="ngModel" min="0" required > 
+                        <small>Entrada numérica mayor a 0.</small>
+                        <div *ngIf="fineLoanId.invalid && (fineLoanId.dirty || fineLoanId.touched)">
+                            <div *ngIf="fineLoanId.errors?.['required']" style="margin-top: 4px; color: rgb(255, 0, 0);">                 
+                                Campo vacío no permitido.               
+                            </div>
+                            <div *ngIf="!fineLoanId.errors?.['min']" style="margin-top: 4px; color: rgb(255, 0, 0);" >                 
+                                Se espera una entrada mayor a 0.            
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!fine.editMode" style="margin-top: 4px;">
+                      {{ fine.folioSolicitud }}
+                    </div> 
+                  </td>
+                  <td>
+                    <div *ngIf="fine.editMode">
+                      <input class="form-control form-check-input form-check-inline " type="checkbox" id="fineState" name="fineState" aria-label="fineState" [checked]="fine.estado" [(ngModel)]="fine.estado" #fineState="ngModel" required>  
+                      <small>La casilla marcada indica una multa PAGADA.</small> 
+                    </div>
+                    <div *ngIf="!fine.editMode " style="margin-top: 4px;">
+                        <div *ngIf="!fine.estado" style="margin-top: 4px; color: rgb(255, 0, 0);">
+                            <!--<input class="form-control form-check-input form-check-inline" type="checkbox" id="fineState" name="fineState" aria-label="fineState" [checked]="false" [(ngModel)]="fine.estado" #fineState="ngModel" style="pointer-events: none;" required  > -->
+                            NO PAGADA.
+                        </div>
+                        <div *ngIf="fine.estado" style="margin-top: 4px; color: rgb(44, 191, 14);">
+                            <!--<input class="form-control form-check-input form-check-inline" type="checkbox" id="fineState" name="fineState" aria-label="fineState" [checked]="true"  [(ngModel)]="fine.estado" #fineState="ngModel" style="pointer-events: none" required > -->
+                            PAGADA.
+                        </div>
+                       
+                    </div> 
+                     
+                  </td>
+                  <td> 
+                    <div >
+                      <div *ngIf="fine.editMode">
+                        <input class="form-control " type="datetime" id="fineDate" name="fineDate" aria-label="fineDate" [(ngModel)]="fine.fecha" [ngModel]="fine.fecha | date: 'dd/MM/yyyy hh:mm a'"  #fineDate="ngModel" disabled>
+                      </div>
+                      <div *ngIf="!fine.editMode" style="margin-top: 4px;">
+                        {{ fine.fecha | date: 'dd/MM/yyyy hh:mm a' }}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="fine.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="submit" class="btn btn-success" [disabled]="!formulario.valid" title="Editar multa" id="updateFine"> 
+                            <i class="bi bi-check-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="cancelEditMode(fine)" id="cancelEditMode" >
+                            <i class="bi bi-x-square"></i>
+                          </button>
+                        </a>
+                      </div>
+                      
+                    </div>
+                    <div *ngIf="!fine.editMode" style="min-height: fit-content;">
+                      <div class="d-grid gap-2 d-inline-flex">
+                        <a>
+                          <button type="button" class="btn btn-success" (click)="editModeOn(fine)" id="editModeOn"> 
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                        </a>
+                        <a>
+                          <button type="button" class="btn btn-danger" (click)="deleteFine(fine)" id="deleteFine" >
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

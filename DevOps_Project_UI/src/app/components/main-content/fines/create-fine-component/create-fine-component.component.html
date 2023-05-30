@@ -1,1 +1,56 @@
-<p>create-fine-component works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card" >
+                <div class="card-body">
+                    <div class="text-center">
+                        <span class="h3"> Agregar multa </span>
+                    </div>
+                    <form class="mt-4" [formGroup]="newFine" (ngSubmit)="createFine()" >
+                        <div class="row">
+                            <div class="col">
+                                <label>Monto</label>
+                                <input type=number step=0.01 class="form-control form-control-lg-mt-3" formControlName="monto" placeholder="Ejemplo: 200.00">
+                                <div *ngIf="newFine.controls['monto'].invalid && newFine.controls['monto'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Campo obligatorio con formato monetario: 200.00.           
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label>Observación</label>
+                                <textarea class="form-control form-control-lg-mt-3" id="observacion" formControlName="observacion" placeholder="Escriba aquí la razón de la multa y otras observaciones importantes." rows="3"></textarea>
+                                <div *ngIf="newFine.controls['observacion'].invalid && newFine.controls['observacion'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Campo vacío no permitido.                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Folio</label>
+                                <input type="number" class="form-control form-control-lg-mt-3" formControlName="folioSolicitud" placeholder="Ejemplo: 2">
+                                <div *ngIf="newFine.controls['folioSolicitud'].invalid && newFine.controls['folioSolicitud'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Entrada no permitida. Campo obligatorio con formato numérico mayor a 0.           
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label>Estado de pago de la multa.</label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-control form-check-input form-check-inline" id="estado" formControlName="estado">
+                                    <label class="form-check-label" for="estado">
+                                      Pagado.
+                                    </label>
+                                    <div *ngIf="newFine.value.estado === true && newFine.controls['estado'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                        Se ha marcado la multa como PAGADA.                     
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" [disabled]="!newFine.valid" class="btn btn-success btn-lg me-md-2">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

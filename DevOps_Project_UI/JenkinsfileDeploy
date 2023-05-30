@@ -40,7 +40,7 @@ pipeline {
             steps {
                 dir('DevOps_Project_UI'){
                     sh 'docker container ls -a'
-                    sh 'docker run -d --name devops_ui-$buildNumber -p 4000:80 devops_project_ui-$branch:1.0.0-$buildNumber'
+                    sh 'docker run -d --name devops_ui-$buildNumber -p 4200:80 devops_project_ui-$branch:1.0.0-$buildNumber'
                 }
                 
             }

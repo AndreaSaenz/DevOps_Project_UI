@@ -1,1 +1,50 @@
-<p>create-loan-component works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card" >
+                <div class="card-body">
+                    <div class="text-center">
+                        <span class="h3"> Agregar préstamo </span>
+                    </div>
+                    <form class="mt-4" [formGroup]="newLoan" (ngSubmit)="createLoan()" >
+                        <div class="row">
+                            <div class="col">
+                                <label>Estado de la devolución.</label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-control form-check-input form-check-inline" id="estado" formControlName="estado">
+                                    <label class="form-check-label" for="estado">
+                                      Devuelto.
+                                    </label>
+                                    <div *ngIf="newLoan.value.estado === true && newLoan.controls['estado'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                        Se ha marcado la computadora como DEVUELTA.                     
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="col">
+                                <label>Fecha estipulada devolución</label>
+                                <input type="datetime-local" class="form-control form-control-lg-mt-3" formControlName="fechaEstipuladaDev">
+                                <div *ngIf="newLoan.controls['fechaEstipuladaDev'].invalid && newLoan.controls['fechaEstipuladaDev'].touched" style="margin-top: 4px; margin-bottom: 4px;color: rgb(255, 0, 0);">                 
+                                    Campo vacío no válido.                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label>Fecha real de devolución</label>
+                                <input type="datetime-local" class="form-control form-control-lg-mt-3" formControlName="fechaRealDev">
+                            </div>
+                            <div class="col">
+                                <label>Observación</label>
+                                <textarea class="form-control form-control-lg-mt-3" id="observacion" formControlName="observacion" placeholder="Escriba aquí otras observaciones importantes sobre el préstamo." rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" [disabled]="!newLoan.valid" class="btn btn-success btn-lg me-md-2">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>

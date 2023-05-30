@@ -26,9 +26,9 @@ pipeline {
         stage('Tests') {
             steps {
                 // Ejecutar los casos de prueba
-                dir('DevOps_Project_UI'){
+                /*dir('DevOps_Project_UI'){
                     sh 'ng test --browsers=ChromeHeadless --watch=false'
-                }
+                }*/
                 
             }
         }

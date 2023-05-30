@@ -13,80 +13,11 @@ import { LoanServicesService } from 'src/app/services/loan/loan-services.service
 })
 export class LoansTableComponentComponent {
 
-  loans1 : any[] = []; 
-
-  loans2 : Array<LoanInterface> = []
+  loans : Array<LoanInterface> = []
 
   backup: any = {};
   id: string | null;
   title = 'Préstamos';
-
-  loans :  Array<LoanInterface>= [
-    {
-      "folio": 65,
-      "estado": false,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "600000",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    },
-    {
-      "folio": 66,
-      "estado" : false,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "defrgtfd",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    },
-    {
-      "folio": 67,
-      "estado": false,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "24 pulgadas",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    },
-    {
-      "folio": 68,
-      "estado": true,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "27 pulgadas",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    },
-    {
-      "folio": 69,
-      "estado": true,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "32 pulgadas",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    },
-    {
-      "folio": 70,
-      "estado": false,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "32 pulgadas",
-      "fechaRealDev": new Date(),
-      "editMode": false
-    }
-  ]
-
-  oneLoan: Array<LoanInterface> = [{
-      "folio": 75,
-      "estado": false,
-      "fechaInicio": new Date(),
-      "fechaEstipuladaDev": new Date(),
-      "observacion": "32 pulgadas",
-      "fechaRealDev": new Date, 
-      "editMode": false
-  }]
 
   constructor( private router: Router, private activatedRoute: ActivatedRoute, private loanService: LoanServicesService ) { 
     this.id = this.activatedRoute.snapshot.paramMap.get('loanId');
@@ -96,13 +27,13 @@ export class LoansTableComponentComponent {
     this.backup = {
       "folio": 0,
       "estado": false,
-      "fechaInicio": new Date(),
       "fechaEstipuladaDev": new Date(),
+      "fechaRealDev": new Date(),
       "observacion": "",
-      "fechaRealDev": new Date()
+      "fechaInicio": new Date()
     };
     this.searchByIdMode();
-    this.loans2 = [];
+    this.loans = [];
 
     this.loanService.refreshNeeded.subscribe( () => {
       if(this.id !== null){
@@ -130,36 +61,25 @@ export class LoansTableComponentComponent {
   }
 
   searchLoanById( search: boolean, form: NgForm){
-    //console.log(form.valid);
-    //console.log(search);
-    //console.log(form.value);
-    //console.log(Object.values(form.value)[0]);
     this.id = String(Object.values(form.value)[0]);
-    //this.title = 'Préstamo (' + Object.values(form.value)[0] + ')';
     this.router.navigate(['/main/loans/', Object.values(form.value)[0]]);
-    //console.log(this.title);
     this.searchByIdMode();
     
   }
 
   updateLoan(form: NgForm){
-    //Invocar método PUT del servicio
-    //console.log(Object.values(form.value));
-    //console.log(form.value);
-    //console.log(Object.entries(form.value));
-    //console.log(form.value.loanId);
-
+   
     const loanToEdit: any ={
       "folio": form.value.loanFolio,
       "estado": form.value.loanState,
-      "fechaInicio": form.value.loanStartDate,
       "fechaEstipuladaDev": form.value.loanExpectedReturnDate,
+      "fechaRealDev": form.value.loanRealReturnDate,
       "observacion": form.value.loanObservation,
-      "loanRealreturnDate": form.value.loanRealReturnDate
+      "fechaInicio": form.value.loanStartDate
     }
     
     
-    this.loanService.updateLoan(form.value.loanId, loanToEdit).subscribe({
+    this.loanService.updateLoan(form.value.loanFolio, loanToEdit).subscribe({
       next: (val: any) => {
         window.alert(`Préstamo actualizado`);
       },
@@ -176,7 +96,7 @@ export class LoansTableComponentComponent {
       this.router.navigate(['/main/loans']);
     }
     else{
-      this.router.navigate(['/main/loans', form.value.loanId]);
+      this.router.navigate(['/main/loans', form.value.loanFolio]);
     }
   }
 
@@ -187,10 +107,8 @@ export class LoansTableComponentComponent {
   }
 
   deleteLoan(loan: any){
-    //Invocar método DELETE del servicio 
-    //
-    
-    this.loanService.deleteLoan(loan.id).subscribe(data => {
+
+    this.loanService.deleteLoan(loan.folio).subscribe(data => {
       window.alert(`Préstamo eliminado`);
     });
     
@@ -201,10 +119,10 @@ export class LoansTableComponentComponent {
 
     try {
       this.loanService.getAllLoans().subscribe(data => {
-        this.loans2 = [];
+        this.loans = [];
         
         for (var element of data) {
-          this.loans2.push({
+          this.loans.push({
             ...element,
             "editMode": false
           })
@@ -213,7 +131,7 @@ export class LoansTableComponentComponent {
       });
     } catch (error: any) {
       window.alert(`Error Code: ${error.status}\nMessage: ${error.message}`);
-      this.loans2 = [];
+      this.loans = [];
     }
 
   }
@@ -222,8 +140,8 @@ export class LoansTableComponentComponent {
 
     try {
       this.loanService.getLoanById(Number(this.id)).subscribe(data => {
-        this.loans2 = [];
-        this.loans2.push({
+        this.loans = [];
+        this.loans.push({
           ...data,
           "editMode": false
         })     
@@ -240,10 +158,8 @@ export class LoansTableComponentComponent {
       this.title = 'Préstamo (' + this.id + ')';
 
       if( !Number.isNaN(Number(this.id))){
-        this.loans2 = [];    
+        this.loans = [];    
         this.getLoanById();
-
-        this.loans = this.oneLoan;
       } else{
         this.router.navigate(['/main/loans']);
       }

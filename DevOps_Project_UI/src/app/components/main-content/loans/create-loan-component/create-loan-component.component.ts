@@ -30,10 +30,6 @@ export class CreateLoanComponentComponent {
       "fechaRealDev": Number(this.newLoan.value.fechaRealDev),
       "observacion": this.newLoan.value.observacion
     }
-    //console.log(loan);
-    //console.log(loan.Name);
-    //console.log(this.newLoan);
-    //console.log(localStorage.getItem('token'));
 
     this.loanService.createLoan(loan).subscribe({
       next: (val: any) => {

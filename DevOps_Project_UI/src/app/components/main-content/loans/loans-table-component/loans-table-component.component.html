@@ -25,7 +25,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let loan of loans" > <!--class="needs-validation" name="formulario1" novalidate>-->
+                <tr *ngFor="let loan of loans" > 
                 
                   <td> 
                     <div >
@@ -115,7 +115,7 @@
                     </div>
                     <div *ngIf="!loan.editMode" style="min-height: fit-content;">
                       <div class="d-grid gap-2 d-inline-flex">
-                        <a><!--href="/main/loans/{{loan.id}}"-->
+                        <a>
                           <button type="button" class="btn btn-success" (click)="editModeOn(loan)" id="editModeOn"> 
                             <i class="bi bi-pencil-square"></i>
                           </button>

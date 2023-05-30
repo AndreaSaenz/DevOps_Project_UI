@@ -32,8 +32,7 @@ pipeline {
                         fi
                     '''
                 
-                // }
-                
+                // }                
             }
         }
         stage('Run container') {
@@ -43,6 +42,27 @@ pipeline {
                     sh 'docker run -d --name devops_ui-$buildNumber -p 4200:80 devops_project_ui-$branch:1.0.0-$buildNumber'
                 }
                 
+            }
+        }
+        stage('Run UI on Virtual Machine') {
+            steps {
+                sh '''
+                    sshpass -p vboxuser2 ssh vboxuser@192.168.1.71
+                    cd Documentos
+                    if [ !-d DevOps_Project_UI ]
+                    then 
+                        git clone https://github.com/AndreaSaenz/DevOps_Project_UI.git
+                    fi
+                    cd DevOps_Project_UI 
+                    git checkout develop
+                    git fetch
+                    git pull
+                    cd DevOps_Project_UI
+                    npm install
+                    npm run build
+                    ng serve   
+                    exit 
+                '''
             }
         }
     }

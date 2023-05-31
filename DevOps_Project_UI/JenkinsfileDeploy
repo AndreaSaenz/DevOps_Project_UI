@@ -47,7 +47,7 @@ pipeline {
         stage('Run UI on Virtual Machine') {
             steps {
                 sh '''
-                    sshpass -p vboxuser2 ssh vboxuser@192.168.1.71
+                    sshpass -p vboxuser2 ssh -t -t vboxuser@192.168.1.71
                     cd Documentos
                     if [ !-d DevOps_Project_UI ]
                     then 

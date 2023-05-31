@@ -46,8 +46,8 @@ pipeline {
         }
         stage('Run UI on Virtual Machine') {
             steps {
-                sh '''
-                    sshpass -p vboxuser2 ssh -t -t vboxuser2@192.168.1.71
+
+                def onRemote = ''' 
                     cd Documentos
                     if [ !-d DevOps_Project_UI ]
                     then 
@@ -62,6 +62,11 @@ pipeline {
                     npm run build
                     ng serve   
                     exit 
+                '''
+
+                sh '''
+                    sshpass -p vboxuser2 ssh -t -t vboxuser2@192.168.1.71 -v ${onRemote}
+                    
                 '''
             }
         }
